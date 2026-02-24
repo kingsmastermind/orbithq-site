@@ -52,6 +52,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 .login-field input::placeholder { color:rgba(255,255,255,0.1); font-family:'Space Mono',monospace; letter-spacing:2px; }
 .login-btn { width:100%; padding:0.85rem; margin-top:0.8rem; font-family:'Space Mono',monospace; font-size:0.7rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.12); cursor:pointer; transition:all 0.3s ease; }
 .login-btn:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.25); color:rgba(255,255,255,0.9); }
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-2px)}90%{transform:translateX(2px)}}
 .login-btn.docking { animation:crtDockPulse 0.8s ease infinite; }
 .login-divider { display:flex; align-items:center; gap:1rem; margin:1.2rem 0; }
 .login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.05); }
@@ -1947,9 +1948,10 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
           <span>SYS:</span> STATION ONLINE | <span>ORBIT:</span> NOMINAL<br>
           <span>DOCK:</span> PORT-7 AVAILABLE | <span>CREW:</span> AWAITING AUTH
         </div>
-        <div class="login-field"><label>Operator ID</label><input type="email" placeholder="enter callsign..." id="loginEmail" autocomplete="off" spellcheck="false"></div>
-        <div class="login-field"><label>Access Key</label><input type="password" placeholder="••••••••" id="loginPassword" autocomplete="off"></div>
+        <div class="login-field"><label>Operator ID</label><input type="text" placeholder="enter callsign..." id="loginEmail" autocomplete="off" spellcheck="false"></div>
+        <div class="login-field"><label>Access Key</label><input type="password" placeholder="••••••••" id="loginPassword" autocomplete="off" onkeydown="if(event.key==='Enter')initDocking()"></div>
         <button class="login-btn" id="loginBtn" onclick="initDocking()">[ Initiate Docking ]</button>
+        <div id="loginError" style="text-align:center;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1px;color:#ff4444;margin-top:0.6rem;opacity:0;transition:opacity 0.3s ease;"></div>
         <div style="text-align:center;margin-top:0.75rem"><span onclick="devBypass()" style="font-family:'Space Mono',monospace;font-size:0.42rem;letter-spacing:2px;color:rgba(255,255,255,0.12);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:1px" onmouseover="this.style.color='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.12)'">skip intro →</span></div>
         <div class="login-divider"><span>————</span></div>
         <div class="login-signup">No credentials? <a href="#" onclick="event.preventDefault()">Request Access</a></div>
@@ -3772,7 +3774,21 @@ function devBypass() {
 }
 
 // ════ DOCKING ════
-function initDocking(){
+const _vk=['015eb6e0f8160c0dc774e0d11fde97f98fdbf5a9a692f1dcc9876a4a5a535d0c','e95dc48c0ac0e4c3ced080a623c4dd812647630019cf23c35a8ad498982d9846'];
+async function _h(s){const e=new TextEncoder().encode(s);const b=await crypto.subtle.digest('SHA-256',e);return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function initDocking(){
+  const uid=document.getElementById('loginEmail').value.trim().toLowerCase();
+  const key=document.getElementById('loginPassword').value;
+  const err=document.getElementById('loginError');
+  if(!uid||!key){err.textContent='SYS: ALL FIELDS REQUIRED';err.style.opacity='1';return;}
+  const hash=await _h(uid+':'+key);
+  if(!_vk.includes(hash)){
+    err.textContent='SYS: ACCESS DENIED — INVALID CREDENTIALS';err.style.opacity='1';
+    const box=document.querySelector('.login-box');
+    box.style.animation='none';box.offsetHeight;box.style.animation='shake 0.4s ease';
+    setTimeout(()=>{box.style.animation='';},500);return;
+  }
+  err.style.opacity='0';
   const btn=document.getElementById('loginBtn');
   btn.classList.add('docking');btn.textContent='[ Launching... ]';
   const box=document.querySelector('.login-box');
@@ -3789,6 +3805,7 @@ function initDocking(){
     box.style.transition='none';box.style.opacity='';
     btn.classList.remove('docking');btn.textContent='[ Initiate Docking ]';
     isDocking=false;
+    document.getElementById('loginEmail').value='';document.getElementById('loginPassword').value='';
     setTimeout(()=>{
       document.getElementById('dockTransition').classList.remove('active');
       showCarousel();
