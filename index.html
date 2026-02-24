@@ -1952,7 +1952,6 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <div class="login-field"><label>Access Key</label><input type="password" placeholder="••••••••" id="loginPassword" autocomplete="off" onkeydown="if(event.key==='Enter')initDocking()"></div>
         <button class="login-btn" id="loginBtn" onclick="initDocking()">[ Initiate Docking ]</button>
         <div id="loginError" style="text-align:center;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1px;color:#ff4444;margin-top:0.6rem;opacity:0;transition:opacity 0.3s ease;"></div>
-        <div style="text-align:center;margin-top:0.75rem"><span onclick="devBypass()" style="font-family:'Space Mono',monospace;font-size:0.42rem;letter-spacing:2px;color:rgba(255,255,255,0.12);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:1px" onmouseover="this.style.color='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.12)'">skip intro →</span></div>
         <div class="login-divider"><span>————</span></div>
         <div class="login-signup">No credentials? <a href="#" onclick="event.preventDefault()">Request Access</a></div>
       </div>
@@ -3766,12 +3765,6 @@ function updateTerminalClock(){const el=document.getElementById('terminalClock')
 updateTerminalClock();
 
 // ════ DEV BYPASS ════
-function devBypass() {
-  loginCanvasActive = false;
-  if (loginAnimFrame) cancelAnimationFrame(loginAnimFrame);
-  document.getElementById('loginOverlay').classList.remove('active');
-  showCarousel();
-}
 
 // ════ DOCKING ════
 const _vk=['015eb6e0f8160c0dc774e0d11fde97f98fdbf5a9a692f1dcc9876a4a5a535d0c','e95dc48c0ac0e4c3ced080a623c4dd812647630019cf23c35a8ad498982d9846'];
