@@ -1948,6 +1948,15 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
   .api-tool-card{padding:0.45rem}
   .merch-slot-preview{height:40px}
 }
+/* ── THE FREQUENCY ── */
+@keyframes freqBar1{from{height:4px}to{height:16px}}
+@keyframes freqBar2{from{height:6px}to{height:20px}}
+@keyframes freqBar3{from{height:3px}to{height:12px}}
+.freq-rotation-card{background:rgba(156,39,176,0.06);border:1px solid rgba(156,39,176,0.1);border-radius:8px;padding:0.6rem;cursor:pointer;transition:all 0.3s;text-align:center}
+.freq-rotation-card:hover{background:rgba(156,39,176,0.12);border-color:rgba(156,39,176,0.25);transform:translateY(-2px)}
+.freq-rotation-card.active{border-color:rgba(206,147,216,0.4);box-shadow:0 0 12px rgba(156,39,176,0.15)}
+.freq-link-pill{display:inline-block;padding:0.15rem 0.5rem;border-radius:10px;font-size:0.5rem;font-family:'Space Mono',monospace;border:1px solid rgba(156,39,176,0.2);color:rgba(206,147,216,0.7);text-decoration:none;transition:all 0.2s}
+.freq-link-pill:hover{background:rgba(156,39,176,0.12);color:#ce93d8;border-color:rgba(156,39,176,0.4)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -2047,6 +2056,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
       <div class="nav-item" data-room="stats" onclick="switchRoom('stats',this)"><span class="ni">📡</span> Stats Explorer</div>
       <div class="nav-item" data-room="royalty" onclick="switchRoom('royalty',this)"><span class="ni">💰</span> Royalty Command <span class="badge" style="background:rgba(255,64,129,0.1);border-color:rgba(255,64,129,0.25);color:#ff4081">New</span></div>
       <div class="nav-item" data-room="content" onclick="switchRoom('content',this)"><span class="ni">📅</span> Content Studio</div>
+      <div class="nav-item" data-room="frequency" onclick="switchRoom('frequency',this)"><span class="ni">🎧</span> The Frequency <span class="badge" style="background:rgba(156,39,176,0.1);border-color:rgba(156,39,176,0.25);color:#ce93d8">Live</span></div>
       <div class="nav-section-label">Create</div>
 
       <div class="nav-item" data-room="launch" onclick="switchRoom('launch',this)"><span class="ni">▲</span> Launch Pad</div>
@@ -3357,6 +3367,73 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         </div>
       </div>
 
+      <!-- ═══════════ ROOM 13: THE FREQUENCY ═══════════ -->
+      <div class="room" id="room-frequency">
+        <div class="boot-section room-header">
+          <div>
+            <div class="room-label">Room 13</div>
+            <div class="room-title">The Frequency</div>
+            <div class="room-subtitle">Live DJ showcase — every featured artist transforms the room</div>
+          </div>
+          <div class="room-status"><div class="status-dot green"></div> <span id="freqLiveStatus">Loading...</span></div>
+        </div>
+
+        <!-- ═══ LIVE ENVIRONMENT CANVAS ═══ -->
+        <div class="boot-section" style="position:relative;margin-bottom:1rem">
+          <canvas id="freqEnvCanvas" style="width:100%;height:220px;border-radius:10px;border:1px solid rgba(156,39,176,0.15);display:block"></canvas>
+          <div style="position:absolute;bottom:12px;left:16px;display:flex;align-items:center;gap:8px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ce93d8;box-shadow:0 0 8px rgba(156,39,176,0.6);animation:csPulseRec 1.5s infinite"></div>
+            <span style="font-size:0.5rem;color:#ce93d8;font-family:'Orbitron',sans-serif;letter-spacing:2px" id="freqEnvLabel">ENVIRONMENT LOADING</span>
+          </div>
+        </div>
+
+        <!-- ═══ FEATURED DJ CARD ═══ -->
+        <div class="boot-section" id="freqDJCard" style="margin-bottom:1rem;background:linear-gradient(135deg,rgba(156,39,176,0.06),rgba(233,30,99,0.04));border:1px solid rgba(156,39,176,0.12);border-radius:12px;padding:1.2rem">
+          <div style="display:flex;align-items:flex-start;gap:1rem">
+            <!-- DJ Avatar -->
+            <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(156,39,176,0.25),rgba(233,30,99,0.2));border:2px solid rgba(206,147,216,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <span style="font-size:1.8rem" id="freqDJAvatar">🎧</span>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem">
+                <span style="font-family:'Orbitron',sans-serif;font-size:0.9rem;color:#e8eaf6;font-weight:700" id="freqDJName">—</span>
+                <span class="badge" style="background:rgba(156,39,176,0.15);border-color:rgba(156,39,176,0.3);color:#ce93d8;font-size:0.4rem" id="freqDJBadge"></span>
+              </div>
+              <p style="color:rgba(232,234,246,0.55);font-size:0.65rem;line-height:1.5;margin-bottom:0.5rem" id="freqDJBio">Loading featured DJ...</p>
+              <div style="display:flex;gap:0.4rem;flex-wrap:wrap" id="freqDJLinks"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ MIX PLAYER ═══ -->
+        <div class="boot-section" id="freqMixSection" style="margin-bottom:1rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem">
+            <div class="rc-section-title" style="color:#ce93d8">NOW PLAYING</div>
+            <div style="display:flex;gap:0.3rem;align-items:center">
+              <div style="width:4px;height:12px;background:#ce93d8;border-radius:2px;animation:freqBar1 0.8s infinite alternate"></div>
+              <div style="width:4px;height:18px;background:#e040fb;border-radius:2px;animation:freqBar2 0.6s infinite alternate"></div>
+              <div style="width:4px;height:10px;background:#ce93d8;border-radius:2px;animation:freqBar3 0.9s infinite alternate"></div>
+              <div style="width:4px;height:15px;background:#e040fb;border-radius:2px;animation:freqBar1 0.7s infinite alternate"></div>
+              <div style="width:4px;height:8px;background:#ce93d8;border-radius:2px;animation:freqBar2 1s infinite alternate"></div>
+            </div>
+          </div>
+          <div id="freqMixEmbed" style="background:rgba(156,39,176,0.04);border:1px solid rgba(156,39,176,0.12);border-radius:10px;padding:1rem;min-height:120px;display:flex;align-items:center;justify-content:center">
+            <div style="text-align:center">
+              <div style="font-size:1.5rem;margin-bottom:0.3rem;opacity:0.4">🎵</div>
+              <div style="color:rgba(232,234,246,0.25);font-size:0.6rem;font-family:'Orbitron',sans-serif" id="freqMixTitle">Mix embed loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ DJ ROTATION ═══ -->
+        <div class="boot-section">
+          <div class="rc-section-title" style="color:rgba(232,234,246,0.4);margin-bottom:0.6rem">FEATURED ROTATION</div>
+          <div id="freqRotation" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.5rem">
+            <div style="text-align:center;padding:1rem;color:rgba(232,234,246,0.2);font-size:0.55rem;font-family:'Orbitron',sans-serif">Loading rotation...</div>
+          </div>
+        </div>
+      </div><!-- /room-frequency -->
+
     </div><!-- /content-area -->
   </div><!-- /main-column -->
 </div><!-- /app -->
@@ -3386,6 +3463,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
     <div class="mobile-more-item" onclick="switchRoom('pricing',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">◈</div><div class="mmi-label">Plans</div></div>
     <div class="mobile-more-item" onclick="if(!rosterMode)toggleRosterMode();else switchRoom('roster',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">👥</div><div class="mmi-label">Roster</div></div>
     <div class="mobile-more-item" onclick="switchRoom('content',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">📅</div><div class="mmi-label">Content Studio</div></div>
+    <div class="mobile-more-item" onclick="switchRoom('frequency',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">🎧</div><div class="mmi-label">Frequency</div></div>
     <div class="mobile-more-item" onclick="switchRoom('launch',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">▲</div><div class="mmi-label">Launch Pad</div></div>
 
 
@@ -3409,6 +3487,7 @@ const portalRooms = [
   {id:'roster',name:'Roster',desc:'Multi-artist management. Aggregate analytics. Individual deep-dives.',badge:'4 artists',color:'#80cbc4',shape:'cross',active:true,meta:['4 artists under management','Aggregate & individual stats','Per-artist context switching']},
   {id:'launch',name:'Launch Pad',desc:'Release distribution pipeline. DSP checklist, pre-save links, 8-week rollout timeline.',badge:'online',color:'#ff6e40',shape:'hex',active:true,meta:['8-week release timeline','DSP submission checklist','Pre-save link generator']},
   {id:'content',name:'Content Studio',desc:'Plan, create, and schedule content across every platform.',badge:'online',color:'#ffab40',shape:'diamond',active:true,meta:['Visual content calendar','Caption generator','Multi-platform scheduling']},
+  {id:'frequency',name:'The Frequency',desc:'Live DJ showcase. Every featured artist transforms the room entirely.',badge:'live',color:'#ce93d8',shape:'oct',active:true,meta:['Featured DJ rotation','Procedural environments','Embedded live mixes']},
   {id:'curriculum',name:'Curriculum',desc:'Everything you need to know about the music industry. Interactive library.',badge:'active',color:'#ea80fc',shape:'pent',active:true,meta:['70 flashcards across 7 books','Quiz terminal with scoring','Progress tracking & badges']},
   {id:'settings',name:'Settings',desc:'Account management, connected platforms, and billing.',badge:'online',color:'#90a4ae',shape:'tri',active:true,meta:['Connected platform manager','Notification preferences','Billing & subscription']},
 ];
@@ -3909,6 +3988,7 @@ const roomMeta = {
   studio:   { label:'The Studio', status:'2 Sessions Awaiting Review', statusType:'yellow' },
   pricing:  { label:'Plans & Pricing', status:'Hybrid Tiers Available', statusType:'green' },
   content:   { label:'Content Studio', status:'Active', statusType:'green' },
+  frequency: { label:'The Frequency', status:'Loading...', statusType:'green' },
   launch:    { label:'Launch Pad', status:'Active', statusType:'green' },
   curriculum:{ label:'The Curriculum', status:'Active', statusType:'green' },
   settings:  { label:'Settings', status:'Active', statusType:'green' }
@@ -3957,7 +4037,10 @@ function switchRoom(roomId, navEl) {
         if (roomId === 'studio') setTimeout(studioInit, 200);
         if (roomId === 'pricing') setTimeout(pricingInit, 200);
         if (roomId === 'identity') setTimeout(idlabLoadProfile, 200);
+        if (roomId === 'frequency') setTimeout(frequencyInit, 200);
       }
+      // Every-visit refreshes (not just first boot)
+      if (roomId === 'content') setTimeout(csBootDB, 300);
     }
     isTransitioning = false;
   }, 120);
@@ -6910,8 +6993,85 @@ function csGenCaption(){
   document.getElementById('csGenResult').style.display='block';
 }
 function csTogglePlat(btn){btn.classList.toggle('active');const a=btn.classList.contains('active');btn.style.background=a?'rgba(225,48,108,0.15)':'rgba(255,255,255,0.05)';btn.style.borderColor=a?'rgba(225,48,108,0.4)':'rgba(255,255,255,0.1)';btn.style.color=a?'#e1306c':'rgba(232,234,246,0.4)';}
-function csSchedule(){const cap=document.getElementById('csCaption').value;if(!cap){alert('Write or generate a caption first');return;}alert('Post scheduled! (API integration coming with backend)');}
-function csDraft(){const cap=document.getElementById('csCaption').value;if(!cap){alert('Write something first');return;}alert('Draft saved!');}
+function csSchedule(){
+  const cap=document.getElementById('csCaption').value;
+  if(!cap){orbitalConfirm('WRITE SOMETHING FIRST','alert');return;}
+  if(!_currentUser){orbitalConfirm('LOGIN REQUIRED','alert');return;}
+  // Collect platforms
+  const plats=[];
+  document.querySelectorAll('.cs-plat-btn.active').forEach(b=>plats.push(b.dataset.plat));
+  // Save to Supabase calendar
+  const now=new Date();
+  const scheduledAt=new Date(csYear,csMonth,now.getDate()+1,9,0); // schedule for tomorrow 9am
+  _sb.from('calendar').insert({
+    user_id: _currentUser.id,
+    title: cap.slice(0,100),
+    description: cap,
+    event_type: 'post',
+    platform: plats.join(','),
+    scheduled_at: scheduledAt.toISOString(),
+    status: 'scheduled',
+    content_data: { caption: cap, platforms: plats, tone: document.getElementById('csTone').value, postType: document.getElementById('csPostType').value }
+  }).then(({error})=>{
+    if(error){console.error('Schedule error:',error);orbitalConfirm('SCHEDULE FAILED','alert');return;}
+    orbitalConfirm('POST SCHEDULED','sync');
+    document.getElementById('csCaption').value='';
+    // Milestone: first RSP broadcast
+    _checkMilestone('first_rsp',{handle:_currentUser.user_metadata?.callsign||'artist'});
+    // Reload calendar from DB
+    _csLoadFromDB();
+  });
+}
+function csDraft(){
+  const cap=document.getElementById('csCaption').value;
+  if(!cap){orbitalConfirm('WRITE SOMETHING FIRST','alert');return;}
+  if(!_currentUser){orbitalConfirm('LOGIN REQUIRED','alert');return;}
+  const plats=[];
+  document.querySelectorAll('.cs-plat-btn.active').forEach(b=>plats.push(b.dataset.plat));
+  _sb.from('calendar').insert({
+    user_id: _currentUser.id,
+    title: cap.slice(0,100),
+    description: cap,
+    event_type: 'post',
+    platform: plats.join(','),
+    scheduled_at: new Date().toISOString(),
+    status: 'draft',
+    content_data: { caption: cap, platforms: plats, tone: document.getElementById('csTone').value, postType: document.getElementById('csPostType').value }
+  }).then(({error})=>{
+    if(error){console.error('Draft error:',error);orbitalConfirm('SAVE FAILED','alert');return;}
+    orbitalConfirm('DRAFT SAVED','locked');
+    document.getElementById('csCaption').value='';
+    _csLoadFromDB();
+  });
+}
+
+// Load user calendar events from Supabase
+async function _csLoadFromDB(){
+  if(!_currentUser) return;
+  try{
+    const {data,error}=await _sb.from('calendar').select('*').eq('user_id',_currentUser.id).order('scheduled_at',{ascending:true});
+    if(error) throw error;
+    // Clear user events, keep LP sync events
+    csEvents=csEvents.filter(e=>e.fromLaunchPad);
+    // Merge DB events
+    if(data) data.forEach(ev=>{
+      const d=new Date(ev.scheduled_at);
+      const plats=ev.platform?ev.platform.split(','):[];
+      csEvents.push({
+        day:d.getDate(),month:d.getMonth(),year:d.getFullYear(),
+        title:ev.title,plats,status:ev.status,type:ev.event_type,
+        color:ev.status==='scheduled'?'#ffab40':ev.status==='draft'?'rgba(232,234,246,0.3)':'#00e676',
+        dbId:ev.id, description:ev.description
+      });
+    });
+    csRenderCal();
+    csRenderQueue();
+    // Update status
+    const scheduled=csEvents.filter(e=>e.status==='scheduled'&&!e.fromLaunchPad).length;
+    const synced=csEvents.filter(e=>e.fromLaunchPad).length;
+    document.getElementById('csLiveStatus').textContent=scheduled+' post'+(scheduled!==1?'s':'')+' scheduled · '+synced+' release'+(synced!==1?'s':'')+' synced';
+  }catch(e){console.error('Calendar load error:',e);}
+}
 function csLoadTemplate(tone,type){
   const pool=csCaptions[tone]?.[type]||[];
   const list=document.getElementById('csTemplateList');
@@ -6930,6 +7090,9 @@ function csUpdateSyncMonitor(){
 
 // Init on room entry
 if(document.getElementById('csCalGrid')){csRenderCal();csUpdateSyncMonitor();}
+
+// Content Studio DB load hook — called from switchRoom
+function csBootDB(){ if(_currentUser) _csLoadFromDB(); }
 
 // ════ LAUNCH PAD ENGINE (synced with Content Studio) ════
 function lpNewRelease(){alert('New Release wizard — set title, type, release date, and begin 8-week countdown. Coming with backend.');}
@@ -7946,6 +8109,10 @@ function setEnvironment(roomId) {
     envActive = 'settings';
     initEngineRoom();
     envCanvas.style.opacity = '1';
+  } else if (roomId === 'frequency') {
+    envActive = 'frequency';
+    initGrowRoom();
+    envCanvas.style.opacity = '1';
   } else {
     // Other rooms — fade out env for now, will add per-room later
     envActive = null;
@@ -7995,9 +8162,322 @@ function envLoop() {
     drawLibrary(envCtx, W, H);
   } else if (envActive === 'settings') {
     drawEngineRoom(envCtx, W, H);
+  } else if (envActive === 'frequency') {
+    drawGrowRoom(envCtx, W, H);
   }
   
   envFrame = requestAnimationFrame(envLoop);
+}
+
+// ── HOOK INTO ROOM SWITCHING ──
+
+// ── CANNABIS GROW ROOM (The Frequency — DJ Nikka T) ──
+let growPlants = [];
+let growLights = [];
+let growHaze = [];
+function initGrowRoom() {
+  growPlants = []; growLights = []; growHaze = [];
+  const W = envCanvas.width, H = envCanvas.height;
+  // Grow lights hanging from ceiling — purple/pink LEDs
+  for (let i = 0; i < 5; i++) {
+    growLights.push({
+      x: W * 0.1 + i * W * 0.2,
+      y: H * 0.08,
+      width: W * 0.14,
+      phase: Math.random() * Math.PI * 2,
+      intensity: 0.6 + Math.random() * 0.4
+    });
+  }
+  // Cannabis plants — silhouettes
+  for (let i = 0; i < 12; i++) {
+    growPlants.push({
+      x: W * 0.05 + (i / 12) * W * 0.9 + (Math.random() - 0.5) * 30,
+      baseY: H * 0.65 + Math.random() * H * 0.15,
+      height: 40 + Math.random() * 60,
+      spread: 15 + Math.random() * 25,
+      swayPhase: Math.random() * Math.PI * 2,
+      leaves: 3 + Math.floor(Math.random() * 4)
+    });
+  }
+  // Haze particles
+  for (let i = 0; i < 80; i++) {
+    growHaze.push({
+      x: Math.random() * W, y: H * 0.3 + Math.random() * H * 0.5,
+      vx: (Math.random() - 0.5) * 0.3, vy: -0.1 - Math.random() * 0.2,
+      size: 3 + Math.random() * 8, alpha: 0.02 + Math.random() * 0.04
+    });
+  }
+}
+function drawGrowRoom(ctx, W, H) {
+  // Dark room gradient
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, 'rgba(15,5,20,0.7)');
+  bg.addColorStop(0.4, 'rgba(20,5,30,0.5)');
+  bg.addColorStop(1, 'rgba(10,3,15,0.6)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Grow lights — cone of purple/pink light
+  for (const lt of growLights) {
+    const pulse = 0.7 + Math.sin(envTime * 0.015 + lt.phase) * 0.3;
+    const grad = ctx.createRadialGradient(lt.x, lt.y, 5, lt.x, lt.y + H * 0.5, lt.width * 2);
+    grad.addColorStop(0, `rgba(180,40,200,${0.12 * pulse * lt.intensity})`);
+    grad.addColorStop(0.4, `rgba(200,50,160,${0.06 * pulse * lt.intensity})`);
+    grad.addColorStop(1, 'rgba(150,30,180,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(lt.x - lt.width * 2, lt.y, lt.width * 4, H);
+    // Light fixture
+    ctx.fillStyle = `rgba(200,180,220,${0.25 * pulse})`;
+    ctx.fillRect(lt.x - lt.width * 0.4, lt.y - 3, lt.width * 0.8, 6);
+    // LED dots
+    for (let d = 0; d < 3; d++) {
+      ctx.beginPath();
+      ctx.arc(lt.x - lt.width * 0.25 + d * lt.width * 0.25, lt.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,50,255,${0.5 * pulse})`;
+      ctx.fill();
+    }
+  }
+
+  // Plants — serrated leaf silhouettes
+  for (const p of growPlants) {
+    const sway = Math.sin(envTime * 0.008 + p.swayPhase) * 3;
+    ctx.save();
+    ctx.translate(p.x + sway, p.baseY);
+    // Stem
+    ctx.strokeStyle = 'rgba(40,100,30,0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(sway * 0.3, -p.height);
+    ctx.stroke();
+    // Leaves — fan shape
+    for (let l = 0; l < p.leaves; l++) {
+      const ly = -p.height * 0.3 - l * (p.height * 0.15);
+      const angle = (l % 2 === 0 ? -1 : 1) * (0.3 + l * 0.12);
+      ctx.save();
+      ctx.translate(sway * 0.2, ly);
+      ctx.rotate(angle + Math.sin(envTime * 0.01 + l) * 0.05);
+      // Leaf shape
+      ctx.fillStyle = `rgba(30,${70 + l * 10},20,0.25)`;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.spread * 0.6, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    // Top cola — glowing bud
+    const glow = 0.15 + Math.sin(envTime * 0.02 + p.swayPhase) * 0.05;
+    ctx.beginPath();
+    ctx.arc(sway * 0.3, -p.height - 5, 6 + Math.random() * 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(100,180,60,${glow})`;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Haze particles — slow floating smoke
+  for (const h of growHaze) {
+    h.x += h.vx + Math.sin(envTime * 0.005 + h.y * 0.01) * 0.15;
+    h.y += h.vy;
+    if (h.y < H * 0.1) { h.y = H * 0.75 + Math.random() * H * 0.2; h.x = Math.random() * W; }
+    if (h.x < -20) h.x = W + 20;
+    if (h.x > W + 20) h.x = -20;
+    ctx.beginPath();
+    ctx.arc(h.x, h.y, h.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(180,140,200,${h.alpha})`;
+    ctx.fill();
+  }
+
+  // Floor — dark reflective surface
+  const floorY = H * 0.82;
+  ctx.fillStyle = 'rgba(5,2,8,0.4)';
+  ctx.fillRect(0, floorY, W, H - floorY);
+  ctx.strokeStyle = 'rgba(120,40,160,0.06)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(0, floorY + i * 8);
+    ctx.lineTo(W, floorY + i * 8);
+    ctx.stroke();
+  }
+}
+
+// ── THE FREQUENCY — DJ SHOWCASE ENGINE ──
+let _freqDJs = [];
+let _freqCurrentDJ = null;
+let _freqEnvAnim = null;
+
+async function frequencyInit() {
+  // Load DJs from Supabase
+  try {
+    const { data, error } = await _sb
+      .from('dj_features')
+      .select('*')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
+    if (error) throw error;
+    _freqDJs = data || [];
+    console.log('[Frequency] Loaded', _freqDJs.length, 'DJs');
+  } catch (e) {
+    console.error('[Frequency] Load error:', e);
+    _freqDJs = [];
+  }
+
+  // Render
+  if (_freqDJs.length > 0) {
+    // Show first DJ (or resident)
+    const resident = _freqDJs.find(d => d.is_resident) || _freqDJs[0];
+    _freqShowDJ(resident);
+    _freqRenderRotation();
+    document.getElementById('freqLiveStatus').textContent = _freqDJs.length + ' DJ' + (_freqDJs.length > 1 ? 's' : '') + ' in rotation';
+    roomMeta.frequency.status = (resident.dj_name || 'DJ') + ' — Live';
+  } else {
+    document.getElementById('freqLiveStatus').textContent = 'No DJs featured yet';
+    document.getElementById('freqDJName').textContent = 'Coming Soon';
+    document.getElementById('freqDJBio').textContent = 'The Frequency is warming up. Featured DJs will appear here.';
+  }
+
+  // Start environment canvas for the room-specific canvas
+  _freqStartEnv();
+}
+
+function _freqShowDJ(dj) {
+  _freqCurrentDJ = dj;
+  document.getElementById('freqDJName').textContent = dj.dj_name;
+  document.getElementById('freqDJBio').textContent = dj.dj_bio || 'No bio available.';
+  document.getElementById('freqDJBadge').textContent = dj.is_resident ? 'RESIDENT' : 'FEATURED';
+  document.getElementById('freqEnvLabel').textContent = (dj.environment_key || 'unknown').toUpperCase().replace(/_/g, ' ');
+
+  // Links
+  const linksEl = document.getElementById('freqDJLinks');
+  linksEl.innerHTML = '';
+  if (dj.dj_links && typeof dj.dj_links === 'object') {
+    Object.entries(dj.dj_links).forEach(([k, v]) => {
+      if (v) {
+        const a = document.createElement('a');
+        a.className = 'freq-link-pill';
+        a.href = v.startsWith('http') ? v : 'https://' + v;
+        a.target = '_blank';
+        a.textContent = k.charAt(0).toUpperCase() + k.slice(1);
+        linksEl.appendChild(a);
+      }
+    });
+  }
+
+  // Mix embed
+  const embedEl = document.getElementById('freqMixEmbed');
+  const titleEl = document.getElementById('freqMixTitle');
+  if (dj.mix_embed_url) {
+    // SoundCloud or Mixcloud iframe embed
+    const isSC = dj.mix_embed_url.includes('soundcloud');
+    const isMC = dj.mix_embed_url.includes('mixcloud');
+    let embedHTML = '';
+    if (isSC) {
+      embedHTML = '<iframe width="100%" height="120" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=' + encodeURIComponent(dj.mix_embed_url) + '&color=%239c27b0&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false" style="border-radius:8px"></iframe>';
+    } else if (isMC) {
+      embedHTML = '<iframe width="100%" height="120" src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&feed=' + encodeURIComponent(dj.mix_embed_url) + '" frameborder="0" style="border-radius:8px"></iframe>';
+    } else {
+      embedHTML = '<audio controls style="width:100%" src="' + dj.mix_embed_url + '"></audio>';
+    }
+    embedEl.innerHTML = embedHTML;
+    titleEl.textContent = dj.mix_title || 'Now Playing';
+  } else {
+    embedEl.innerHTML = '<div style="text-align:center"><div style="font-size:1.5rem;margin-bottom:0.3rem;opacity:0.4">🎵</div><div style="color:rgba(232,234,246,0.25);font-size:0.6rem;font-family:\'Orbitron\',sans-serif">Mix coming soon — check back for ' + dj.dj_name + '\'s set</div></div>';
+  }
+
+  // Highlight in rotation
+  document.querySelectorAll('.freq-rotation-card').forEach(c => c.classList.toggle('active', c.dataset.djId === String(dj.id)));
+}
+
+function _freqRenderRotation() {
+  const el = document.getElementById('freqRotation');
+  el.innerHTML = '';
+  _freqDJs.forEach(dj => {
+    const card = document.createElement('div');
+    card.className = 'freq-rotation-card' + (dj.id === (_freqCurrentDJ && _freqCurrentDJ.id) ? ' active' : '');
+    card.dataset.djId = dj.id;
+    card.onclick = () => _freqShowDJ(dj);
+    card.innerHTML =
+      '<div style="font-size:1.2rem;margin-bottom:0.3rem">🎧</div>' +
+      '<div style="font-family:\'Orbitron\',sans-serif;font-size:0.6rem;color:#e8eaf6;margin-bottom:0.15rem">' + dj.dj_name + '</div>' +
+      '<div style="font-size:0.45rem;color:rgba(206,147,216,0.5);font-family:\'Space Mono\',monospace">' +
+      (dj.is_resident ? '★ RESIDENT' : dj.environment_key ? dj.environment_key.replace(/_/g, ' ').toUpperCase() : 'FEATURED') + '</div>';
+    el.appendChild(card);
+  });
+}
+
+function _freqStartEnv() {
+  const canvas = document.getElementById('freqEnvCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * (window.devicePixelRatio || 1);
+  canvas.height = canvas.offsetHeight * (window.devicePixelRatio || 1);
+  ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+
+  // Mini procedural grow room in the room-specific canvas
+  const miniPlants = [];
+  for (let i = 0; i < 8; i++) {
+    miniPlants.push({ x: W * 0.05 + (i / 8) * W * 0.9, h: 20 + Math.random() * 30, phase: Math.random() * 6 });
+  }
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // Dark bg
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#0a0312');
+    bg.addColorStop(1, '#0d0518');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+    t++;
+    // Grow lights
+    for (let i = 0; i < 4; i++) {
+      const lx = W * 0.15 + i * W * 0.23;
+      const pulse = 0.5 + Math.sin(t * 0.02 + i) * 0.3;
+      const g = ctx.createRadialGradient(lx, 0, 5, lx, H * 0.6, W * 0.15);
+      g.addColorStop(0, `rgba(180,40,200,${0.15 * pulse})`);
+      g.addColorStop(1, 'rgba(150,30,180,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(lx - W * 0.15, 0, W * 0.3, H);
+    }
+    // Plants
+    for (const p of miniPlants) {
+      const sway = Math.sin(t * 0.01 + p.phase) * 2;
+      ctx.strokeStyle = 'rgba(40,100,30,0.3)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x, H * 0.8);
+      ctx.lineTo(p.x + sway, H * 0.8 - p.h);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(p.x + sway, H * 0.8 - p.h - 3, 4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(100,180,60,${0.15 + Math.sin(t * 0.02 + p.phase) * 0.05})`;
+      ctx.fill();
+    }
+    // Haze
+    for (let i = 0; i < 15; i++) {
+      const hx = (t * 0.2 + i * W / 15) % W;
+      const hy = H * 0.3 + Math.sin(t * 0.005 + i) * H * 0.15;
+      ctx.beginPath();
+      ctx.arc(hx, hy, 4 + Math.sin(i + t * 0.01) * 2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(180,140,200,0.04)';
+      ctx.fill();
+    }
+    // DJ Booth silhouette — center
+    const bx = W / 2, by = H * 0.6;
+    ctx.fillStyle = 'rgba(30,10,40,0.5)';
+    ctx.fillRect(bx - 40, by, 80, 30);
+    ctx.fillStyle = 'rgba(156,39,176,0.08)';
+    ctx.fillRect(bx - 38, by + 2, 76, 26);
+    // Turntable circles
+    const spin = t * 0.03;
+    ctx.strokeStyle = 'rgba(206,147,216,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(bx - 18, by + 15, 8, spin, spin + 4); ctx.stroke();
+    ctx.beginPath(); ctx.arc(bx + 18, by + 15, 8, -spin, -spin + 4); ctx.stroke();
+
+    _freqEnvAnim = requestAnimationFrame(draw);
+  }
+  if (_freqEnvAnim) cancelAnimationFrame(_freqEnvAnim);
+  _freqEnvAnim = requestAnimationFrame(draw);
 }
 
 // ── HOOK INTO ROOM SWITCHING ──
