@@ -1957,6 +1957,70 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 .freq-rotation-card.active{border-color:rgba(206,147,216,0.4);box-shadow:0 0 12px rgba(156,39,176,0.15)}
 .freq-link-pill{display:inline-block;padding:0.15rem 0.5rem;border-radius:10px;font-size:0.5rem;font-family:'Space Mono',monospace;border:1px solid rgba(156,39,176,0.2);color:rgba(206,147,216,0.7);text-decoration:none;transition:all 0.2s}
 .freq-link-pill:hover{background:rgba(156,39,176,0.12);color:#ce93d8;border-color:rgba(156,39,176,0.4)}
+/* ══ CRM PROJECTION ══ */
+.crm-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media(max-width:900px){ .crm-grid { grid-template-columns:1fr; } }
+.crm-panel { background:rgba(10,18,40,0.6); border:1px solid rgba(100,140,255,0.12); border-radius:12px; padding:1.2rem; }
+.crm-panel-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.crm-panel-title { font-family:'Orbitron',monospace; font-size:0.72rem; letter-spacing:2px; color:rgba(130,170,255,0.9); }
+.crm-contact-list { display:flex; flex-direction:column; gap:0.5rem; max-height:320px; overflow-y:auto; }
+.crm-contact-list::-webkit-scrollbar { width:3px; } .crm-contact-list::-webkit-scrollbar-thumb { background:rgba(100,140,255,0.2); border-radius:2px; }
+.crm-contact-card { background:rgba(15,25,55,0.5); border:1px solid rgba(100,140,255,0.08); border-radius:8px; padding:0.8rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:all 0.2s; }
+.crm-contact-card:hover { border-color:rgba(100,140,255,0.25); background:rgba(20,35,70,0.5); }
+.crm-contact-name { font-size:0.82rem; font-weight:600; color:rgba(232,234,246,0.85); }
+.crm-contact-company { font-size:0.65rem; color:rgba(232,234,246,0.35); font-family:'Space Mono',monospace; margin-top:0.15rem; }
+.crm-contact-type { font-size:0.5rem; font-family:'Space Mono',monospace; letter-spacing:1px; padding:0.15rem 0.5rem; border-radius:3px; }
+.crm-ct-sync { background:rgba(0,229,255,0.1); color:var(--accent-cyan); border:1px solid rgba(0,229,255,0.2); }
+.crm-ct-label { background:rgba(124,77,255,0.1); color:var(--accent-purple); border:1px solid rgba(124,77,255,0.2); }
+.crm-ct-curator { background:rgba(0,230,118,0.1); color:var(--accent-green); border:1px solid rgba(0,230,118,0.2); }
+.crm-ct-venue { background:rgba(255,210,100,0.1); color:#ffd264; border:1px solid rgba(255,210,100,0.2); }
+.crm-ct-media { background:rgba(255,64,129,0.1); color:var(--accent-pink); border:1px solid rgba(255,64,129,0.2); }
+.crm-ct-manager { background:rgba(255,145,0,0.1); color:#ff9100; border:1px solid rgba(255,145,0,0.2); }
+.crm-status-pill { font-size:0.48rem; font-family:'Space Mono',monospace; letter-spacing:1px; padding:0.12rem 0.4rem; border-radius:2px; text-transform:uppercase; }
+.crm-st-new { background:rgba(0,229,255,0.1); color:var(--accent-cyan); } .crm-st-contacted { background:rgba(255,210,100,0.1); color:#ffd264; }
+.crm-st-in_conversation { background:rgba(124,77,255,0.1); color:var(--accent-purple); } .crm-st-converted { background:rgba(0,230,118,0.1); color:var(--accent-green); }
+.crm-st-archived { background:rgba(232,234,246,0.05); color:rgba(232,234,246,0.3); }
+.crm-add-form { display:flex; flex-direction:column; gap:0.6rem; }
+.crm-input { background:rgba(5,12,30,0.6); border:1px solid rgba(100,140,255,0.12); border-radius:6px; padding:0.55rem 0.75rem; color:var(--text-primary); font-family:'Space Grotesk',sans-serif; font-size:0.78rem; outline:none; transition:border-color 0.2s; }
+.crm-input:focus { border-color:rgba(100,140,255,0.35); }
+.crm-input::placeholder { color:rgba(232,234,246,0.2); }
+.crm-select { background:rgba(5,12,30,0.6); border:1px solid rgba(100,140,255,0.12); border-radius:6px; padding:0.55rem 0.75rem; color:var(--text-primary); font-family:'Space Grotesk',sans-serif; font-size:0.78rem; outline:none; cursor:pointer; -webkit-appearance:none; }
+.crm-select option { background:#0a1228; }
+.crm-btn { font-family:'Orbitron',monospace; font-size:0.6rem; letter-spacing:3px; padding:0.6rem 1.2rem; border:1px solid rgba(100,140,255,0.3); background:rgba(100,140,255,0.08); color:rgba(130,170,255,0.9); border-radius:6px; cursor:pointer; transition:all 0.2s; text-transform:uppercase; }
+.crm-btn:hover { background:rgba(100,140,255,0.15); border-color:rgba(100,140,255,0.5); }
+.crm-btn.primary { border-color:rgba(0,229,255,0.4); color:var(--accent-cyan); background:rgba(0,229,255,0.08); }
+.crm-btn.primary:hover { background:rgba(0,229,255,0.15); }
+.crm-empty { text-align:center; padding:2rem; color:rgba(232,234,246,0.2); font-size:0.75rem; }
+.crm-row { display:flex; gap:0.6rem; }
+.crm-row > * { flex:1; }
+.crm-pitch-panel { margin-top:1rem; }
+.crm-pitch-card { background:rgba(15,25,55,0.5); border:1px solid rgba(100,140,255,0.08); border-radius:8px; padding:0.8rem; margin-bottom:0.5rem; }
+.crm-pitch-subj { font-size:0.78rem; font-weight:600; color:rgba(232,234,246,0.8); }
+.crm-pitch-meta { font-size:0.55rem; color:rgba(232,234,246,0.3); font-family:'Space Mono',monospace; margin-top:0.2rem; }
+.crm-pitch-body { font-size:0.72rem; color:rgba(232,234,246,0.5); margin-top:0.5rem; line-height:1.5; white-space:pre-wrap; }
+.crm-projector-beam { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:40%; height:100%; background:linear-gradient(to top, rgba(100,140,255,0.06), transparent 60%); pointer-events:none; z-index:0; }
+.crm-glass-header { position:relative; z-index:1; }
+.crm-detail { display:none; } .crm-detail.active { display:block; }
+.crm-back-btn { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:rgba(130,170,255,0.6); cursor:pointer; margin-bottom:0.8rem; transition:color 0.2s; }
+.crm-back-btn:hover { color:rgba(130,170,255,0.9); }
+.crm-stats-row { display:flex; gap:0.8rem; margin-bottom:1rem; }
+.crm-stat { flex:1; background:rgba(10,18,40,0.5); border:1px solid rgba(100,140,255,0.08); border-radius:8px; padding:0.7rem; text-align:center; }
+.crm-stat-val { font-family:'Orbitron',monospace; font-size:1.1rem; color:rgba(130,170,255,0.9); }
+.crm-stat-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; letter-spacing:2px; color:rgba(232,234,246,0.25); margin-top:0.2rem; text-transform:uppercase; }
+/* ══ ASCENT LEVEL INDICATOR ══ */
+.ascent-indicator { display:flex; align-items:center; gap:0.5rem; padding:0.5rem 1.5rem 0; margin-bottom:0.5rem; }
+.ascent-orb { width:14px; height:14px; border-radius:50%; }
+.ascent-orb.stardust { background:radial-gradient(circle, rgba(232,234,246,0.4), rgba(232,234,246,0.1)); box-shadow:0 0 6px rgba(232,234,246,0.2); }
+.ascent-orb.nebula { background:radial-gradient(circle, rgba(124,77,255,0.7), rgba(124,77,255,0.2)); box-shadow:0 0 8px rgba(124,77,255,0.4); }
+.ascent-orb.protostar { background:radial-gradient(circle, rgba(255,210,100,0.8), rgba(255,145,0,0.3)); box-shadow:0 0 10px rgba(255,210,100,0.5); }
+.ascent-orb.star { background:radial-gradient(circle, rgba(0,230,118,0.9), rgba(0,229,255,0.3)); box-shadow:0 0 12px rgba(0,230,118,0.5); animation:starPulse 2s ease-in-out infinite; }
+@keyframes starPulse { 0%,100%{ box-shadow:0 0 12px rgba(0,230,118,0.5); } 50%{ box-shadow:0 0 20px rgba(0,230,118,0.8); } }
+.ascent-label { font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:2px; text-transform:uppercase; color:rgba(232,234,246,0.3); }
+.ascent-label .level-name { color:rgba(232,234,246,0.5); font-weight:600; }
+/* ══ TRANSFORMATION SCENE ══ */
+#ascentTransform { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:100000; pointer-events:none; opacity:0; transition:opacity 0.5s; }
+#ascentTransform.active { opacity:1; pointer-events:auto; }
+#ascentTransformCanvas { width:100%; height:100%; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -2057,6 +2121,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
       <div class="nav-item" data-room="royalty" onclick="switchRoom('royalty',this)"><span class="ni">💰</span> Royalty Command <span class="badge" style="background:rgba(255,64,129,0.1);border-color:rgba(255,64,129,0.25);color:#ff4081">New</span></div>
       <div class="nav-item" data-room="content" onclick="switchRoom('content',this)"><span class="ni">📅</span> Content Studio</div>
       <div class="nav-item" data-room="frequency" onclick="switchRoom('frequency',this)"><span class="ni">🎧</span> The Frequency <span class="badge" style="background:rgba(156,39,176,0.1);border-color:rgba(156,39,176,0.25);color:#ce93d8">Live</span></div>
+      <div class="nav-item" data-room="crm" onclick="switchRoom('crm',this)"><span class="ni">📡</span> The Projection <span class="badge" style="background:rgba(100,140,255,0.1);border-color:rgba(100,140,255,0.25);color:rgba(130,170,255,0.9)">CRM</span></div>
       <div class="nav-section-label">Create</div>
 
       <div class="nav-item" data-room="launch" onclick="switchRoom('launch',this)"><span class="ni">▲</span> Launch Pad</div>
@@ -2070,6 +2135,10 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
       <div class="nav-lobby-btn" onclick="backToLobby()"><span class="ni">⬡</span> Station Lobby</div>
     </nav>
     <div class="sidebar-footer">
+      <div class="ascent-indicator" id="ascentIndicator">
+        <div class="ascent-orb stardust" id="ascentOrb"></div>
+        <div class="ascent-label">The Ascent · <span class="level-name" id="ascentLevelName">Stardust</span></div>
+      </div>
       <div class="user-card">
         <div class="user-avatar">A</div>
         <div><div class="user-name">Artist</div><div class="user-tier">Pro Tier</div></div>
@@ -3435,6 +3504,128 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         </div>
       </div><!-- /room-frequency -->
 
+      <!-- ── CRM PROJECTION — "The Projection" ── -->
+      <div class="room" id="room-crm">
+        <div class="crm-projector-beam"></div>
+        <div class="boot-section room-header crm-glass-header">
+          <div>
+            <div class="room-label">The Projection</div>
+            <div class="room-title">CRM Command</div>
+            <div class="room-subtitle">Your outreach pipeline — contacts, pitches, and connections projected on glass</div>
+          </div>
+          <div class="room-status"><div class="status-dot green" id="crmStatusDot"></div> <span id="crmStatusText">Initializing...</span></div>
+        </div>
+
+        <div class="boot-section crm-stats-row" id="crmStatsRow">
+          <div class="crm-stat"><div class="crm-stat-val" id="crmStatTotal">0</div><div class="crm-stat-lbl">Contacts</div></div>
+          <div class="crm-stat"><div class="crm-stat-val" id="crmStatNew">0</div><div class="crm-stat-lbl">New</div></div>
+          <div class="crm-stat"><div class="crm-stat-val" id="crmStatActive">0</div><div class="crm-stat-lbl">Active</div></div>
+          <div class="crm-stat"><div class="crm-stat-val" id="crmStatConverted">0</div><div class="crm-stat-lbl">Converted</div></div>
+        </div>
+
+        <!-- LIST VIEW -->
+        <div class="boot-section crm-grid" id="crmListView">
+          <div class="crm-panel" style="grid-column:1/-1">
+            <div class="crm-panel-head">
+              <div class="crm-panel-title">◇ Contacts</div>
+              <button class="crm-btn primary" onclick="crmShowAdd()">+ Add Contact</button>
+            </div>
+            <div class="crm-contact-list" id="crmContactList">
+              <div class="crm-empty" id="crmEmptyMsg">No contacts yet. Add your first contact to begin building your network.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADD CONTACT FORM (hidden by default) -->
+        <div class="boot-section" id="crmAddView" style="display:none">
+          <div class="crm-panel">
+            <div class="crm-panel-head">
+              <div class="crm-panel-title">◇ New Contact</div>
+              <span class="crm-back-btn" onclick="crmHideAdd()">← BACK TO LIST</span>
+            </div>
+            <div class="crm-add-form">
+              <div class="crm-row">
+                <input class="crm-input" id="crmAddName" placeholder="Contact name *" />
+                <input class="crm-input" id="crmAddCompany" placeholder="Company / Label" />
+              </div>
+              <div class="crm-row">
+                <input class="crm-input" id="crmAddEmail" placeholder="Email" type="email" />
+                <input class="crm-input" id="crmAddPhone" placeholder="Phone" />
+              </div>
+              <div class="crm-row">
+                <select class="crm-select" id="crmAddType">
+                  <option value="">— Contact Type —</option>
+                  <option value="sync_library">Sync Library</option>
+                  <option value="label">Label</option>
+                  <option value="curator">Curator / Playlist</option>
+                  <option value="venue">Venue</option>
+                  <option value="media">Media / Press</option>
+                  <option value="manager">Manager / A&R</option>
+                </select>
+                <select class="crm-select" id="crmAddSource">
+                  <option value="manual">Manual Entry</option>
+                  <option value="apollo">Apollo</option>
+                  <option value="scraped">Scraped</option>
+                  <option value="imported">Imported</option>
+                </select>
+              </div>
+              <textarea class="crm-input" id="crmAddNotes" placeholder="Notes..." rows="2" style="resize:vertical"></textarea>
+              <div style="display:flex;gap:0.6rem;justify-content:flex-end">
+                <button class="crm-btn" onclick="crmHideAdd()">Cancel</button>
+                <button class="crm-btn primary" onclick="crmSaveContact()">Save Contact</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT DETAIL VIEW (hidden by default) -->
+        <div class="boot-section" id="crmDetailView" style="display:none">
+          <div class="crm-panel">
+            <div class="crm-panel-head">
+              <div class="crm-panel-title" id="crmDetailName">Contact</div>
+              <span class="crm-back-btn" onclick="crmBackToList()">← BACK TO LIST</span>
+            </div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+              <div><span style="font-size:0.55rem;color:rgba(232,234,246,0.3);font-family:'Space Mono',monospace">COMPANY</span><div style="font-size:0.78rem;color:rgba(232,234,246,0.7)" id="crmDetailCompany">—</div></div>
+              <div><span style="font-size:0.55rem;color:rgba(232,234,246,0.3);font-family:'Space Mono',monospace">EMAIL</span><div style="font-size:0.78rem;color:rgba(232,234,246,0.7)" id="crmDetailEmail">—</div></div>
+              <div><span style="font-size:0.55rem;color:rgba(232,234,246,0.3);font-family:'Space Mono',monospace">TYPE</span><div id="crmDetailType"></div></div>
+              <div><span style="font-size:0.55rem;color:rgba(232,234,246,0.3);font-family:'Space Mono',monospace">STATUS</span>
+                <select class="crm-select" id="crmDetailStatus" onchange="crmUpdateStatus()" style="margin-top:0.2rem;padding:0.3rem 0.5rem;font-size:0.7rem">
+                  <option value="new">New</option><option value="contacted">Contacted</option><option value="in_conversation">In Conversation</option><option value="converted">Converted</option><option value="archived">Archived</option>
+                </select>
+              </div>
+            </div>
+            <div style="font-size:0.55rem;color:rgba(232,234,246,0.3);font-family:'Space Mono',monospace;margin-bottom:0.3rem">NOTES</div>
+            <div style="font-size:0.75rem;color:rgba(232,234,246,0.5);margin-bottom:1.2rem;white-space:pre-wrap" id="crmDetailNotes">—</div>
+          </div>
+          <!-- PITCH SECTION -->
+          <div class="crm-panel crm-pitch-panel">
+            <div class="crm-panel-head">
+              <div class="crm-panel-title">◇ Pitches</div>
+              <button class="crm-btn primary" onclick="crmShowPitchForm()">+ Draft Pitch</button>
+            </div>
+            <div id="crmPitchList"><div class="crm-empty">No pitches yet for this contact.</div></div>
+            <div id="crmPitchForm" style="display:none;margin-top:0.8rem">
+              <input class="crm-input" id="crmPitchSubject" placeholder="Subject line..." style="margin-bottom:0.5rem" />
+              <textarea class="crm-input" id="crmPitchBody" placeholder="Write your pitch..." rows="4" style="resize:vertical;margin-bottom:0.5rem"></textarea>
+              <select class="crm-select" id="crmPitchTemplate" style="margin-bottom:0.5rem">
+                <option value="">— Template —</option>
+                <option value="sync_intro">Sync Library Intro</option>
+                <option value="label_pitch">Label Pitch</option>
+                <option value="playlist_sub">Playlist Submission</option>
+                <option value="press_kit">Press Kit</option>
+                <option value="custom">Custom</option>
+              </select>
+              <div style="display:flex;gap:0.6rem;justify-content:flex-end">
+                <button class="crm-btn" onclick="crmHidePitchForm()">Cancel</button>
+                <button class="crm-btn primary" onclick="crmSavePitch()">Save Draft</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /room-crm -->
+
     </div><!-- /content-area -->
   </div><!-- /main-column -->
 </div><!-- /app -->
@@ -3465,6 +3656,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
     <div class="mobile-more-item" onclick="if(!rosterMode)toggleRosterMode();else switchRoom('roster',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">👥</div><div class="mmi-label">Roster</div></div>
     <div class="mobile-more-item" onclick="switchRoom('content',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">📅</div><div class="mmi-label">Content Studio</div></div>
     <div class="mobile-more-item" onclick="switchRoom('frequency',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">🎧</div><div class="mmi-label">Frequency</div></div>
+    <div class="mobile-more-item" onclick="switchRoom('crm',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">📡</div><div class="mmi-label">Projection</div></div>
     <div class="mobile-more-item" onclick="switchRoom('launch',null);setMobileNav('more');toggleMoreMenu()"><div class="mmi-icon">▲</div><div class="mmi-label">Launch Pad</div></div>
 
 
@@ -3489,6 +3681,7 @@ const portalRooms = [
   {id:'launch',name:'Launch Pad',desc:'Release distribution pipeline. DSP checklist, pre-save links, 8-week rollout timeline.',badge:'online',color:'#ff6e40',shape:'hex',active:true,meta:['8-week release timeline','DSP submission checklist','Pre-save link generator']},
   {id:'content',name:'Content Studio',desc:'Plan, create, and schedule content across every platform.',badge:'online',color:'#ffab40',shape:'diamond',active:true,meta:['Visual content calendar','Caption generator','Multi-platform scheduling']},
   {id:'frequency',name:'The Frequency',desc:'Live DJ showcase. Every featured artist transforms the room entirely.',badge:'live',color:'#ce93d8',shape:'oct',active:true,meta:['Featured DJ rotation','Procedural environments','Embedded live mixes']},
+  {id:'crm',name:'The Projection',desc:'Your outreach pipeline. Contacts, pitches, and connections projected on glass.',badge:'CRM',color:'#648cff',shape:'diamond',active:true,meta:['Contact pipeline management','Pitch drafting & tracking','Status pipeline tracking']},
   {id:'curriculum',name:'Curriculum',desc:'Everything you need to know about the music industry. Interactive library.',badge:'active',color:'#ea80fc',shape:'pent',active:true,meta:['70 flashcards across 7 books','Quiz terminal with scoring','Progress tracking & badges']},
   {id:'settings',name:'Settings',desc:'Account management, connected platforms, and billing.',badge:'online',color:'#90a4ae',shape:'tri',active:true,meta:['Connected platform manager','Notification preferences','Billing & subscription']},
 ];
@@ -3990,6 +4183,7 @@ const roomMeta = {
   pricing:  { label:'Plans & Pricing', status:'Hybrid Tiers Available', statusType:'green' },
   content:   { label:'Content Studio', status:'Active', statusType:'green' },
   frequency: { label:'The Frequency', status:'Loading...', statusType:'green' },
+  crm:       { label:'The Projection', status:'CRM Initializing...', statusType:'green' },
   launch:    { label:'Launch Pad', status:'Active', statusType:'green' },
   curriculum:{ label:'The Curriculum', status:'Active', statusType:'green' },
   settings:  { label:'Settings', status:'Active', statusType:'green' }
@@ -4039,6 +4233,7 @@ function switchRoom(roomId, navEl) {
         if (roomId === 'pricing') setTimeout(pricingInit, 200);
         if (roomId === 'identity') setTimeout(idlabLoadProfile, 200);
         if (roomId === 'frequency') setTimeout(frequencyInit, 200);
+        if (roomId === 'crm') setTimeout(crmInit, 200);
       }
       // Every-visit refreshes (not just first boot)
       if (roomId === 'content') setTimeout(csBootDB, 300);
@@ -8130,6 +8325,10 @@ function setEnvironment(roomId) {
     envActive = 'frequency';
     initGrowRoom();
     envCanvas.style.opacity = '1';
+  } else if (roomId === 'crm') {
+    envActive = 'crm';
+    initCrmCityscape();
+    envCanvas.style.opacity = '1';
   } else {
     // Other rooms — fade out env for now, will add per-room later
     envActive = null;
@@ -8181,6 +8380,8 @@ function envLoop() {
     drawEngineRoom(envCtx, W, H);
   } else if (envActive === 'frequency') {
     drawGrowRoom(envCtx, W, H);
+  } else if (envActive === 'crm') {
+    drawCrmCityscape(envCtx, W, H);
   }
   
   envFrame = requestAnimationFrame(envLoop);
@@ -8497,6 +8698,497 @@ function _freqStartEnv() {
   _freqEnvAnim = requestAnimationFrame(draw);
 }
 
+// ── CRM CITYSCAPE ENVIRONMENT — Night skyline projected on glass ──
+let crmBuildings = [], crmStars = [], crmReflections = [];
+function initCrmCityscape() {
+  crmBuildings = []; crmStars = []; crmReflections = [];
+  const W = envCanvas.width, H = envCanvas.height;
+  // Stars in upper sky
+  for (let i = 0; i < 60; i++) crmStars.push({ x: Math.random()*W, y: Math.random()*H*0.45, s: Math.random()*1.5+0.3, blink: Math.random()*Math.PI*2 });
+  // City buildings silhouette
+  let x = 0;
+  while (x < W) {
+    const w = 20 + Math.random()*60;
+    const h = 40 + Math.random()*H*0.35;
+    const lit = Math.random() > 0.3;
+    const windows = [];
+    if (lit) {
+      for (let wy = 8; wy < h-5; wy += 12) {
+        for (let wx = 4; wx < w-4; wx += 10) {
+          if (Math.random() > 0.35) windows.push({ x: wx, y: wy, on: Math.random()>0.2, flicker: Math.random()*1000 });
+        }
+      }
+    }
+    crmBuildings.push({ x, w, h, windows, glow: Math.random()*0.3 });
+    x += w + 2 + Math.random()*8;
+  }
+}
+function drawCrmCityscape(ctx, W, H) {
+  const t = envTime;
+  // Deep night sky gradient
+  const sky = ctx.createLinearGradient(0, 0, 0, H*0.65);
+  sky.addColorStop(0, 'rgba(2,3,12,0.7)');
+  sky.addColorStop(0.5, 'rgba(8,12,35,0.5)');
+  sky.addColorStop(1, 'rgba(15,22,50,0.3)');
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H*0.65);
+  // Stars
+  crmStars.forEach(s => {
+    const a = 0.3 + 0.5*Math.abs(Math.sin(t*0.01 + s.blink));
+    ctx.fillStyle = `rgba(180,200,255,${a})`;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill();
+  });
+  // Cityline base
+  const baseY = H * 0.62;
+  crmBuildings.forEach(b => {
+    // Building body
+    ctx.fillStyle = 'rgba(8,12,30,0.85)';
+    ctx.fillRect(b.x, baseY - b.h, b.w, b.h + H*0.4);
+    // Lit windows
+    b.windows.forEach(w => {
+      if (!w.on) return;
+      const flick = Math.sin(t*0.02 + w.flicker) > -0.8;
+      if (!flick) return;
+      const warmth = Math.random() > 0.7 ? [255,200,100] : [130,170,255];
+      ctx.fillStyle = `rgba(${warmth[0]},${warmth[1]},${warmth[2]},0.6)`;
+      ctx.fillRect(b.x + w.x, baseY - b.h + w.y, 5, 7);
+    });
+    // Top glow on some buildings
+    if (b.glow > 0.1) {
+      ctx.fillStyle = `rgba(100,140,255,${b.glow * 0.15 * (0.7 + 0.3*Math.sin(t*0.005))})`;
+      ctx.fillRect(b.x, baseY - b.h - 2, b.w, 4);
+    }
+  });
+  // Glass reflection effect — horizontal streaks
+  for (let i = 0; i < 5; i++) {
+    const ry = baseY + 10 + i*25;
+    const a = 0.02 + 0.015*Math.sin(t*0.008 + i);
+    ctx.fillStyle = `rgba(100,140,255,${a})`;
+    ctx.fillRect(0, ry, W, 1);
+  }
+  // Projector beam from bottom center
+  const beamGrad = ctx.createLinearGradient(W/2, H, W/2, H*0.2);
+  beamGrad.addColorStop(0, `rgba(100,140,255,${0.04 + 0.02*Math.sin(t*0.01)})`);
+  beamGrad.addColorStop(0.6, 'rgba(100,140,255,0.01)');
+  beamGrad.addColorStop(1, 'rgba(100,140,255,0)');
+  ctx.beginPath();
+  ctx.moveTo(W*0.35, H); ctx.lineTo(W*0.15, H*0.15); ctx.lineTo(W*0.85, H*0.15); ctx.lineTo(W*0.65, H);
+  ctx.closePath(); ctx.fillStyle = beamGrad; ctx.fill();
+}
+
+// ── CRM ROOM LOGIC — Supabase CRUD ──
+let _crmContacts = [];
+let _crmSelectedContact = null;
+
+async function crmInit() {
+  if (!_currentUser) return;
+  try {
+    const { data, error } = await _sb.from('crm_contacts').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: false });
+    if (error) throw error;
+    _crmContacts = data || [];
+    crmRenderList();
+    crmUpdateStats();
+    const n = _crmContacts.length;
+    roomMeta.crm.status = n > 0 ? n + ' contact' + (n!==1?'s':'') + ' in pipeline' : 'Ready to connect';
+    document.getElementById('crmStatusText').textContent = roomMeta.crm.status;
+    console.log('[CRM] Loaded', n, 'contacts');
+  } catch(e) { console.error('[CRM] Init error:', e); }
+}
+
+function crmRenderList() {
+  const list = document.getElementById('crmContactList');
+  const empty = document.getElementById('crmEmptyMsg');
+  if (_crmContacts.length === 0) { list.innerHTML = ''; list.appendChild(empty); empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = _crmContacts.map((c, i) => {
+    const typeClass = c.contact_type ? 'crm-ct-' + c.contact_type : '';
+    const typeLabel = (c.contact_type||'').replace(/_/g,' ');
+    const statusClass = 'crm-st-' + (c.status||'new');
+    return `<div class="crm-contact-card" onclick="crmSelectContact(${i})">
+      <div><div class="crm-contact-name">${esc(c.contact_name)}</div><div class="crm-contact-company">${esc(c.company||'')}</div></div>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        ${typeLabel ? '<span class="crm-contact-type '+typeClass+'">'+typeLabel+'</span>' : ''}
+        <span class="crm-status-pill ${statusClass}">${(c.status||'new').replace(/_/g,' ')}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function crmUpdateStats() {
+  document.getElementById('crmStatTotal').textContent = _crmContacts.length;
+  document.getElementById('crmStatNew').textContent = _crmContacts.filter(c=>c.status==='new').length;
+  document.getElementById('crmStatActive').textContent = _crmContacts.filter(c=>c.status==='contacted'||c.status==='in_conversation').length;
+  document.getElementById('crmStatConverted').textContent = _crmContacts.filter(c=>c.status==='converted').length;
+}
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function crmShowAdd() {
+  document.getElementById('crmListView').style.display = 'none';
+  document.getElementById('crmAddView').style.display = '';
+  document.getElementById('crmAddName').focus();
+}
+function crmHideAdd() {
+  document.getElementById('crmAddView').style.display = 'none';
+  document.getElementById('crmListView').style.display = '';
+  ['crmAddName','crmAddCompany','crmAddEmail','crmAddPhone','crmAddNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('crmAddType').value = '';
+  document.getElementById('crmAddSource').value = 'manual';
+}
+
+async function crmSaveContact() {
+  const name = document.getElementById('crmAddName').value.trim();
+  if (!name) { orbitalConfirm('NAME REQUIRED','alert'); return; }
+  const payload = {
+    user_id: _currentUser.id,
+    contact_name: name,
+    company: document.getElementById('crmAddCompany').value.trim() || null,
+    email: document.getElementById('crmAddEmail').value.trim() || null,
+    phone: document.getElementById('crmAddPhone').value.trim() || null,
+    contact_type: document.getElementById('crmAddType').value || null,
+    source: document.getElementById('crmAddSource').value || 'manual',
+    notes: document.getElementById('crmAddNotes').value.trim() || null,
+    status: 'new'
+  };
+  try {
+    const { data, error } = await _sb.from('crm_contacts').insert(payload).select().single();
+    if (error) throw error;
+    _crmContacts.unshift(data);
+    crmRenderList();
+    crmUpdateStats();
+    crmHideAdd();
+    orbitalConfirm('CONTACT SAVED','sync');
+    // Fire first_crm_contact milestone — "message in a bottle"
+    _checkMilestone('first_crm_contact', { name: name });
+    roomMeta.crm.status = _crmContacts.length + ' contact' + (_crmContacts.length!==1?'s':'') + ' in pipeline';
+    document.getElementById('crmStatusText').textContent = roomMeta.crm.status;
+    console.log('[CRM] Saved contact:', name);
+  } catch(e) { console.error('[CRM] Save error:', e); orbitalConfirm('SAVE FAILED','alert'); }
+}
+
+function crmSelectContact(idx) {
+  _crmSelectedContact = _crmContacts[idx];
+  if (!_crmSelectedContact) return;
+  document.getElementById('crmListView').style.display = 'none';
+  document.getElementById('crmStatsRow').style.display = 'none';
+  document.getElementById('crmDetailView').style.display = '';
+  const c = _crmSelectedContact;
+  document.getElementById('crmDetailName').textContent = '◇ ' + c.contact_name;
+  document.getElementById('crmDetailCompany').textContent = c.company || '—';
+  document.getElementById('crmDetailEmail').textContent = c.email || '—';
+  const typeClass = c.contact_type ? 'crm-ct-' + c.contact_type : '';
+  document.getElementById('crmDetailType').innerHTML = c.contact_type
+    ? '<span class="crm-contact-type '+typeClass+'">'+(c.contact_type||'').replace(/_/g,' ')+'</span>'
+    : '—';
+  document.getElementById('crmDetailStatus').value = c.status || 'new';
+  document.getElementById('crmDetailNotes').textContent = c.notes || '—';
+  crmLoadPitches();
+}
+
+function crmBackToList() {
+  document.getElementById('crmDetailView').style.display = 'none';
+  document.getElementById('crmStatsRow').style.display = '';
+  document.getElementById('crmListView').style.display = '';
+  _crmSelectedContact = null;
+}
+
+async function crmUpdateStatus() {
+  if (!_crmSelectedContact) return;
+  const newStatus = document.getElementById('crmDetailStatus').value;
+  try {
+    await _sb.from('crm_contacts').update({ status: newStatus }).eq('id', _crmSelectedContact.id);
+    _crmSelectedContact.status = newStatus;
+    crmRenderList();
+    crmUpdateStats();
+    orbitalConfirm('STATUS UPDATED','sync');
+  } catch(e) { console.error('[CRM] Status update error:', e); }
+}
+
+let _crmPitches = [];
+async function crmLoadPitches() {
+  if (!_crmSelectedContact) return;
+  document.getElementById('crmPitchList').innerHTML = '<div class="crm-empty">Loading...</div>';
+  try {
+    const { data, error } = await _sb.from('crm_pitches').select('*').eq('contact_id', _crmSelectedContact.id).order('created_at', { ascending: false });
+    if (error) throw error;
+    _crmPitches = data || [];
+    crmRenderPitches();
+  } catch(e) { console.error('[CRM] Pitches load error:', e); }
+}
+function crmRenderPitches() {
+  const el = document.getElementById('crmPitchList');
+  if (_crmPitches.length === 0) { el.innerHTML = '<div class="crm-empty">No pitches yet for this contact.</div>'; return; }
+  el.innerHTML = _crmPitches.map(p => {
+    const statusClass = 'crm-st-' + (p.status||'draft');
+    return `<div class="crm-pitch-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="crm-pitch-subj">${esc(p.subject||'Untitled')}</div>
+        <span class="crm-status-pill ${statusClass}">${(p.status||'draft')}</span>
+      </div>
+      <div class="crm-pitch-meta">${p.template_key ? 'Template: '+p.template_key+' · ' : ''}${new Date(p.created_at).toLocaleDateString()}</div>
+      ${p.body ? '<div class="crm-pitch-body">'+esc(p.body.substring(0,200))+(p.body.length>200?'...':'')+'</div>' : ''}
+    </div>`;
+  }).join('');
+}
+function crmShowPitchForm() { document.getElementById('crmPitchForm').style.display = ''; }
+function crmHidePitchForm() {
+  document.getElementById('crmPitchForm').style.display = 'none';
+  ['crmPitchSubject','crmPitchBody'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('crmPitchTemplate').value = '';
+}
+async function crmSavePitch() {
+  if (!_crmSelectedContact) return;
+  const subject = document.getElementById('crmPitchSubject').value.trim();
+  const body = document.getElementById('crmPitchBody').value.trim();
+  if (!subject && !body) { orbitalConfirm('WRITE SOMETHING','alert'); return; }
+  try {
+    const { data, error } = await _sb.from('crm_pitches').insert({
+      user_id: _currentUser.id,
+      contact_id: _crmSelectedContact.id,
+      subject: subject || null,
+      body: body || null,
+      template_key: document.getElementById('crmPitchTemplate').value || null,
+      status: 'draft'
+    }).select().single();
+    if (error) throw error;
+    _crmPitches.unshift(data);
+    crmRenderPitches();
+    crmHidePitchForm();
+    orbitalConfirm('PITCH DRAFTED','transmit');
+  } catch(e) { console.error('[CRM] Pitch save error:', e); orbitalConfirm('SAVE FAILED','alert'); }
+}
+
+// ── ASCENT LEVEL-UP ENGINE ──
+// Thresholds: 0 milestones = stardust, 2+ = nebula, 5+ = protostar, 6 = star
+const _ascentThresholds = [
+  { level: 'star',      min: 6 },
+  { level: 'protostar', min: 5 },
+  { level: 'nebula',    min: 2 },
+  { level: 'stardust',  min: 0 }
+];
+
+function _getAscentLevel(milestoneCount) {
+  for (const t of _ascentThresholds) {
+    if (milestoneCount >= t.min) return t.level;
+  }
+  return 'stardust';
+}
+
+function _updateAscentUI(level) {
+  const orb = document.getElementById('ascentOrb');
+  const label = document.getElementById('ascentLevelName');
+  if (orb) { orb.className = 'ascent-orb ' + level; }
+  if (label) { label.textContent = level.charAt(0).toUpperCase() + level.slice(1); }
+}
+
+async function _checkAscentLevel() {
+  if (!_currentUser) return;
+  const count = _userMilestones.size;
+  const newLevel = _getAscentLevel(count);
+  // Get current level from local profile cache
+  const currentLevel = _currentUser.user_metadata?.ascent_level ||
+    (document.getElementById('ascentLevelName')?.textContent?.toLowerCase()) || 'stardust';
+  
+  _updateAscentUI(newLevel);
+
+  if (newLevel !== currentLevel && newLevel !== 'stardust') {
+    console.log('[Ascent] Level up!', currentLevel, '→', newLevel);
+    // Update Supabase profile
+    try {
+      await _sb.from('profiles').update({ ascent_level: newLevel }).eq('id', _currentUser.id);
+    } catch(e) { console.error('[Ascent] DB update error:', e); }
+    // Fire Tier 3 Transformation Scene
+    _fireTransformationScene(newLevel);
+  }
+}
+
+// Load Ascent level on session start (hook into existing milestone load)
+const _origLoadMilestones = _loadUserMilestones;
+_loadUserMilestones = async function() {
+  await _origLoadMilestones();
+  // After milestones loaded, set correct UI level
+  const count = _userMilestones.size;
+  const level = _getAscentLevel(count);
+  _updateAscentUI(level);
+};
+
+// Also patch every _checkMilestone to re-evaluate Ascent after
+const _origCheckMilestone = _checkMilestone;
+_checkMilestone = async function(key, ctx) {
+  const wasNew = await _origCheckMilestone(key, ctx);
+  if (wasNew) {
+    // Delay to let poetic residue complete (~6s total: 3.1 confirm + ~3s residue)
+    setTimeout(() => _checkAscentLevel(), 6500);
+  }
+  return wasNew;
+};
+
+// ── TRANSFORMATION SCENE — Tier 3 "Metamorphosis" ──
+// Stardust particles converge → compress → avatar silhouette emerges
+function _fireTransformationScene(newLevel) {
+  const wrap = document.getElementById('ascentTransform');
+  const canvas = document.getElementById('ascentTransformCanvas');
+  if (!wrap || !canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  wrap.classList.add('active');
+  
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const particles = [];
+  const numParticles = 200;
+  
+  // Color palette per level
+  const palettes = {
+    nebula:    { r:124, g:77,  b:255, name:'NEBULA' },
+    protostar: { r:255, g:210, b:100, name:'PROTOSTAR' },
+    star:      { r:0,   g:230, b:118, name:'STAR' }
+  };
+  const pal = palettes[newLevel] || palettes.nebula;
+  
+  // Phase 1: scattered stardust (0-2s)
+  // Phase 2: converge to center (2-5s)
+  // Phase 3: compress + flash (5-6.5s)
+  // Phase 4: silhouette + level text (6.5-9s)
+  // Phase 5: fade out (9-10s)
+  
+  for (let i = 0; i < numParticles; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 200 + Math.random() * Math.max(W,H)*0.4;
+    particles.push({
+      x: cx + Math.cos(angle)*dist,
+      y: cy + Math.sin(angle)*dist,
+      tx: cx + (Math.random()-0.5)*30,
+      ty: cy + (Math.random()-0.5)*50,
+      s: 1 + Math.random()*3,
+      speed: 0.01 + Math.random()*0.02,
+      phase: Math.random()*Math.PI*2,
+      brightness: 0.3 + Math.random()*0.7
+    });
+  }
+  
+  let frame = 0;
+  const fps = 60;
+  const totalFrames = 10 * fps; // 10 seconds
+  
+  function draw() {
+    const t = frame / fps; // time in seconds
+    ctx.clearRect(0, 0, W, H);
+    
+    // Dark backdrop with slight blue tint
+    ctx.fillStyle = `rgba(2,4,15,${Math.min(0.9, t*0.5)})`;
+    ctx.fillRect(0, 0, W, H);
+    
+    if (t < 6.5) {
+      // PHASE 1-3: Particle convergence
+      const convergence = t < 2 ? 0 : Math.min(1, (t-2)/3); // 0 at t=2, 1 at t=5
+      const compression = t < 5 ? 0 : Math.min(1, (t-5)/1.5); // 0 at t=5, 1 at t=6.5
+      
+      particles.forEach(p => {
+        const lerp = convergence;
+        const px = p.x + (p.tx - p.x) * lerp;
+        const py = p.y + (p.ty - p.y) * lerp;
+        // Compression pulls tighter
+        const compX = px + (cx - px) * compression * 0.9;
+        const compY = py + (cy - py) * compression * 0.9;
+        // Slight orbit during convergence
+        const orbit = Math.sin(frame*0.02 + p.phase) * (1-convergence) * 3;
+        const dx = compX + orbit;
+        const dy = compY + Math.cos(frame*0.02 + p.phase) * (1-convergence) * 3;
+        
+        const glow = p.brightness * (0.5 + 0.5*Math.sin(frame*0.05 + p.phase));
+        const size = p.s * (1 - compression*0.5);
+        ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},${glow})`;
+        ctx.beginPath(); ctx.arc(dx, dy, Math.max(0.5, size), 0, Math.PI*2); ctx.fill();
+        // Glow trail
+        if (convergence > 0.3) {
+          ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},${glow*0.15})`;
+          ctx.beginPath(); ctx.arc(dx, dy, size*3, 0, Math.PI*2); ctx.fill();
+        }
+      });
+      
+      // Flash at peak compression
+      if (t > 6 && t < 6.5) {
+        const flashA = Math.sin((t-6)*Math.PI/0.5) * 0.4;
+        ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},${flashA})`;
+        ctx.fillRect(0, 0, W, H);
+      }
+    } else if (t < 9) {
+      // PHASE 4: Silhouette + level text
+      const fadeIn = Math.min(1, (t-6.5)/1);
+      
+      // Central glow
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 120);
+      grad.addColorStop(0, `rgba(${pal.r},${pal.g},${pal.b},${0.3*fadeIn})`);
+      grad.addColorStop(0.5, `rgba(${pal.r},${pal.g},${pal.b},${0.08*fadeIn})`);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad; ctx.fillRect(cx-150, cy-150, 300, 300);
+      
+      // Avatar silhouette (geometric humanoid shape)
+      ctx.save(); ctx.globalAlpha = fadeIn;
+      ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},0.8)`;
+      // Head
+      ctx.beginPath(); ctx.arc(cx, cy-50, 18, 0, Math.PI*2); ctx.fill();
+      // Body
+      ctx.beginPath(); ctx.moveTo(cx-22, cy-28); ctx.lineTo(cx+22, cy-28);
+      ctx.lineTo(cx+18, cy+40); ctx.lineTo(cx-18, cy+40); ctx.closePath(); ctx.fill();
+      // Arms
+      ctx.beginPath(); ctx.moveTo(cx-22, cy-25); ctx.lineTo(cx-42, cy+10); ctx.lineTo(cx-38, cy+14);
+      ctx.lineTo(cx-20, cy-18); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(cx+22, cy-25); ctx.lineTo(cx+42, cy+10); ctx.lineTo(cx+38, cy+14);
+      ctx.lineTo(cx+20, cy-18); ctx.closePath(); ctx.fill();
+      // Subtle particles still orbiting silhouette
+      for (let i = 0; i < 30; i++) {
+        const angle = (i/30)*Math.PI*2 + frame*0.01;
+        const r = 80 + Math.sin(frame*0.03+i)*15;
+        const px = cx + Math.cos(angle)*r;
+        const py = cy + Math.sin(angle)*r - 10;
+        ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},${0.2+0.2*Math.sin(frame*0.05+i)})`;
+        ctx.beginPath(); ctx.arc(px, py, 1.5, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+      
+      // Level text
+      if (fadeIn > 0.5) {
+        const textA = (fadeIn - 0.5) * 2;
+        ctx.save(); ctx.globalAlpha = textA;
+        ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},0.9)`;
+        ctx.font = '800 2.5rem Orbitron, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(pal.name, cx, cy + 100);
+        ctx.font = '400 0.8rem "Space Mono", monospace';
+        ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},0.5)`;
+        ctx.fillText('THE ASCENT — LEVEL UP', cx, cy + 125);
+        ctx.restore();
+      }
+    } else {
+      // PHASE 5: Fade out
+      const fadeOut = 1 - Math.min(1, (t-9)/1);
+      ctx.save(); ctx.globalAlpha = fadeOut;
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 120);
+      grad.addColorStop(0, `rgba(${pal.r},${pal.g},${pal.b},0.2)`);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad; ctx.fillRect(cx-150, cy-150, 300, 300);
+      ctx.fillStyle = `rgba(${pal.r},${pal.g},${pal.b},0.7)`;
+      ctx.font = '800 2.5rem Orbitron, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(pal.name, cx, cy + 100);
+      ctx.restore();
+    }
+    
+    frame++;
+    if (frame < totalFrames) {
+      requestAnimationFrame(draw);
+    } else {
+      wrap.classList.remove('active');
+      ctx.clearRect(0, 0, W, H);
+      // Fire Orbital Confirm after scene
+      orbitalConfirm('ASCENT: ' + pal.name, 'transmit');
+    }
+  }
+  requestAnimationFrame(draw);
+}
+
 // ── HOOK INTO ROOM SWITCHING ──
 const origSwitchRoom = switchRoom;
 switchRoom = function(roomId, navEl) {
@@ -8520,6 +9212,7 @@ envActive = 'lobby';
 if (envCanvas) { envCanvas.style.opacity = '1'; envLoop(); }
 
 </script>
+<div id="ascentTransform"><canvas id="ascentTransformCanvas"></canvas></div>
 <div class="orb-confirm" id="orbConfirm"><div class="orb-confirm-inner"><div class="orb-confirm-glow" id="orbGlow"></div><div class="orb-confirm-hline" id="orbHline"></div><div class="orb-confirm-text" id="orbText"><div class="orb-confirm-scanline"></div></div></div></div>
 <div id="orbResidue"><canvas id="orbResCanvas"></canvas></div>
 </body>
