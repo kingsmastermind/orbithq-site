@@ -3819,6 +3819,7 @@ async function initDocking(){
     const result=await _sb.auth.signInWithPassword({email,password:key});
     if(result.error) throw result.error;
     _currentUser=result.data.user;
+    _loadUserMilestones(); // Pre-load milestones at login
     err.style.opacity='0';
     _runDockingAnimation(btn);
   } catch(e){
@@ -3863,7 +3864,7 @@ function _runDockingAnimation(btn){
 
 async function logout(){
   await _sb.auth.signOut();
-  _currentUser=null;_idlabLoaded=false;
+  _currentUser=null;_idlabLoaded=false;_milestonesLoaded=false;_userMilestones.clear();
   window.location.hash='';
   const app=document.getElementById('app');app.classList.remove('active');app.classList.add('hidden');
   lobbyActive=false;document.getElementById('carouselLobby').classList.remove('active');
@@ -3879,6 +3880,7 @@ async function checkExistingSession(){
   const{data:{session}}=await _sb.auth.getSession();
   if(session&&session.user){
     _currentUser=session.user;
+    _loadUserMilestones(); // Pre-load milestones at session resume
     document.getElementById('loginOverlay').classList.remove('active');
     loginCanvasActive=false;
     if(loginAnimFrame)cancelAnimationFrame(loginAnimFrame);
@@ -5517,6 +5519,8 @@ let _idlabLoaded = false;
 
 async function idlabLoadProfile() {
   if (!_currentUser || _idlabLoaded) return;
+  // Load milestones alongside profile (parallel fetch)
+  _loadUserMilestones();
   try {
     const { data, error } = await _sb
       .from('profiles')
@@ -5624,9 +5628,11 @@ function idlabCommitPlatform(input) {
     tile.classList.add('connected');
     tile.classList.remove('expanded');
     tile.querySelector('.ptile-status').textContent = 'Connected';
-    // Extract handle from URL for residue display
+    // Tier 1: Orbital Confirm fires every time (routine, satisfying)
+    orbitalConfirm(tile.querySelector('.ptile-name').textContent.toUpperCase() + ' LINKED', 'sync');
+    // Tier 2: Poetic Residue — FIRST platform connection only (milestone gate)
     const handle = _extractHandle(url, platform);
-    orbitalConfirm(tile.querySelector('.ptile-name').textContent.toUpperCase() + ' LINKED', 'sync', { handle, platform });
+    _checkMilestone('dsp_connected', { handle, platform });
   } else {
     tile.classList.remove('connected');
     tile.classList.remove('expanded');
@@ -5810,6 +5816,84 @@ const _residueMap = {
   twitter:     { effect:'laserEtch',     color:[230,236,240] },
   _default:    { effect:'electricArc',   color:[0,230,118] }
 };
+
+// ── MILESTONE ENGINE — Poetic Residue fires on firsts only ──
+// "Every effect is a metaphor" — residue = surprise, not routine
+const _userMilestones = new Set(); // loaded from user_ascent at session start
+let _milestonesLoaded = false;
+
+// Milestone → Poetic Metaphor → Effect mapping
+// Each milestone fires ONCE per user lifetime. The effect IS the meaning.
+const _milestoneResidueMap = {
+  // First platform connection (Identity Lab) — "Coordinates locking onto a star chart"
+  dsp_connected:     { effect:'laserEtch',      color:[0,230,180],  getText: (ctx) => ctx.handle || '@artist' },
+  // First RSP broadcast — "Signal propagation, radio waves from antenna"
+  first_rsp:         { effect:'electricArc',     color:[255,210,64], getText: (ctx) => ctx.handle || 'SIGNAL LIVE' },
+  // First Vault upload — "Submersion, bioluminescent deep sea"
+  vault_upload:      { effect:'smokeBrand',      color:[0,180,255],  getText: (ctx) => ctx.title || 'SECURED' },
+  // First CRM pitch sent — "Message in a bottle, paper airplane"
+  first_crm_contact: { effect:'neonBurnIn',      color:[180,120,255],getText: (ctx) => ctx.name || 'TRANSMITTED' },
+  // Identity Lab complete — "Star chart fully mapped"
+  identity_complete: { effect:'holoProjection',  color:[0,230,118],  getText: (ctx) => ctx.handle || 'IDENTITY LOCKED' },
+  // First Curriculum module — "Apparition, ghostly silhouette forming"
+  curriculum_module: { effect:'neonBurnIn',      color:[255,180,60], getText: (ctx) => 'KNOWLEDGE GAINED' }
+};
+
+async function _loadUserMilestones() {
+  if (!_currentUser || _milestonesLoaded) return;
+  try {
+    const { data, error } = await _sb
+      .from('user_ascent')
+      .select('milestone_key')
+      .eq('user_id', _currentUser.id);
+    if (error) throw error;
+    _userMilestones.clear();
+    if (data) data.forEach(row => _userMilestones.add(row.milestone_key));
+    _milestonesLoaded = true;
+    console.log('[Milestone] Loaded:', [..._userMilestones]);
+  } catch (e) { console.error('[Milestone] Load error:', e); }
+}
+
+// Gate + fire + record. Returns true if milestone was NEW.
+async function _checkMilestone(milestoneKey, context = {}) {
+  if (_userMilestones.has(milestoneKey)) return false; // already earned
+  const mCfg = _milestoneResidueMap[milestoneKey];
+  if (!mCfg) return false; // unknown milestone
+
+  // Mark locally FIRST (prevents double-fire during async)
+  _userMilestones.add(milestoneKey);
+
+  // Fire the poetic residue AFTER Orbital Confirm finishes (~3100ms delay)
+  // Orbital Confirm takes ~2900ms + 100ms buffer
+  const displayText = mCfg.getText(context);
+  setTimeout(() => _firePoetic(displayText, mCfg.effect, mCfg.color), 3100);
+
+  // Write to Supabase (fire-and-forget, local cache is source of truth for session)
+  if (_currentUser) {
+    try {
+      await _sb.from('user_ascent').insert({
+        user_id: _currentUser.id,
+        milestone_key: milestoneKey
+      });
+      console.log('[Milestone] Recorded:', milestoneKey);
+    } catch (e) { console.error('[Milestone] Write error:', e); }
+  }
+  return true;
+}
+
+// Direct residue fire with custom effect+color (bypasses platform map)
+function _firePoetic(text, effectName, rgb) {
+  const wrap = document.getElementById('orbResidue');
+  const canvas = document.getElementById('orbResCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  wrap.classList.add('active');
+  if (_resAnimId) cancelAnimationFrame(_resAnimId);
+  const effects = { electricArc: _resElectricArc, neonBurnIn: _resNeonBurnIn, smokeBrand: _resSmokeBrand, laserEtch: _resLaserEtch, holoProjection: _resHoloProjection };
+  const fn = effects[effectName] || effects.electricArc;
+  fn(ctx, canvas, canvas.width / 2, canvas.height / 2, rgb, text, wrap);
+}
 
 let _resAnimId = null;
 
