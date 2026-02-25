@@ -2608,6 +2608,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
           <button class="vault-filter-btn" onclick="vaultFilter('gold',this)">🥇 Gold+</button>
           <button class="vault-filter-btn" onclick="vaultFilter('platinum',this)">🪙 Platinum+</button>
           <button class="vault-label-toggle" id="vaultLabelToggle" onclick="vaultToggleLabel()">Label View: OFF</button>
+          <button onclick="vaultAddRelease()" style="margin-left:auto;background:rgba(255,210,100,0.1);border:1px solid rgba(255,210,100,0.25);color:#ffd264;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.5rem;font-family:'Space Mono',monospace">+ Add Release</button>
         </div>
 
         <!-- Plaque Hall — Main Artist -->
@@ -4909,6 +4910,12 @@ function vaultCloseDetail() {
   document.getElementById('vaultDetailPanel').classList.remove('open');
 }
 
+function vaultAddRelease() {
+  // MVP: Orbital Confirm + milestone. Full upload UI comes with Supabase Vault backend.
+  orbitalConfirm('RELEASE SECURED', 'locked');
+  _checkMilestone('vault_upload', { title: 'NEW RELEASE' });
+}
+
 // ═══════════════════════════════════════════════
 // THE STUDIO — COLLABORATION HUB
 // ═══════════════════════════════════════════════
@@ -5667,6 +5674,14 @@ async function idlabSaveProfile() {
     setTimeout(() => { btn.textContent = 'Save Profile'; btn.disabled = false; }, 2000);
     // Update preview live
     idlabUpdatePreview(updates);
+    // Milestone: identity_complete — when profile has name + bio + genre + at least 1 platform
+    const hasName = !!updates.display_name;
+    const hasBio = !!updates.bio && updates.bio.length > 10;
+    const hasGenre = !!updates.genre;
+    const hasPlatform = Object.keys(updates.dsp_links || {}).length > 0 || Object.keys(updates.social_links || {}).length > 0;
+    if (hasName && hasBio && hasGenre && hasPlatform) {
+      _checkMilestone('identity_complete', { handle: '@' + updates.display_name.toLowerCase().replace(/\s+/g, '') });
+    }
   } catch (e) {
     console.error('Save error:', e);
     btn.textContent = 'Save Profile'; btn.disabled = false;
@@ -6644,6 +6659,8 @@ function currMarkKnown(){
   currSaveState();
   currUpdateGlobalProgress();
   currRenderBookshelf();
+  // Milestone: first curriculum card mastered — "Apparition, ghostly silhouette forming"
+  _checkMilestone('curriculum_module', {});
   currNextCard();
 }
 
