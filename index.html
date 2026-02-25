@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OrbitHQ — Your Artist Command Center</title>
+<title>OrbitHQ — Powered by 10eOS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@200;300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
@@ -2036,7 +2036,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
       <div class="terminal-header">
         <div class="terminal-header-left">
           <div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div>
-          <span class="terminal-title">NASA-OrbitHQ Terminal</span>
+          <span class="terminal-title">10eOS · OrbitHQ Terminal</span>
         </div>
         <span class="terminal-status">ONLINE</span>
       </div>
@@ -2044,7 +2044,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <div class="login-logo">OrbitHQ</div>
         <div class="login-subtitle">crew access terminal v2.6</div>
         <div class="terminal-readout">
-          <span>SYS:</span> STATION ONLINE | <span>ORBIT:</span> NOMINAL<br>
+          <span>SYS:</span> STATION ONLINE | <span>ORBIT:</span> NOMINAL | <span>OS:</span> 10eOS v8.1<br>
           <span>DOCK:</span> PORT-7 AVAILABLE | <span>CREW:</span> AWAITING AUTH
         </div>
         <div class="login-field"><label>Operator ID</label><input type="text" placeholder="enter callsign..." id="loginEmail" autocomplete="off" spellcheck="false"></div>
@@ -2055,7 +2055,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <div class="login-signup">No credentials? <a href="#" onclick="event.preventDefault();document.getElementById('loginError').textContent='SYS: REQUEST ACCESS AT ORBITARTS.APP';document.getElementById('loginError').style.opacity='1';document.getElementById('loginError').style.color='#88aaff';">Request Access</a></div>
       </div>
       <div class="terminal-footer">
-        <span>OrbitHQ Flight Ops</span>
+        <span>OrbitHQ Flight Ops · 10eOS</span>
         <span id="terminalClock">00:00:00 UTC</span>
         <span>Orbit The Arts LLC</span>
       </div>
@@ -2089,7 +2089,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
   <div class="nav-arrow left" id="navArrowL" onclick="portalNavigate(-1)">‹</div>
   <div class="nav-arrow right" id="navArrowR" onclick="portalNavigate(1)">›</div>
   <div class="cl-bottom">
-    <div class="cl-bottom-left">Orbit The Arts LLC · OrbitHQ Platform</div>
+    <div class="cl-bottom-left">Orbit The Arts LLC · OrbitHQ · Powered by 10eOS</div>
     <div class="cl-bottom-right">
       <div class="cb-stat"><div class="cb-val">142.8K</div><div class="cb-lbl">Streams</div></div>
       <div class="cb-stat"><div class="cb-val">$1,247</div><div class="cb-lbl">Revenue</div></div>
@@ -2187,7 +2187,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
             <div class="room-title">Command Center</div>
             <div class="room-subtitle">Your mission briefing for today</div>
           </div>
-          <div class="room-status"><div class="status-dot green"></div> All Systems Operational</div>
+          <div class="room-status"><div class="status-dot green"></div> All Systems Operational <span style="margin-left:0.5rem;font-size:0.4rem;color:rgba(0,229,255,0.35);font-family:'Space Mono',monospace;border:1px solid rgba(0,229,255,0.12);padding:0.1rem 0.35rem;border-radius:4px;letter-spacing:1px">10eOS v8.1</span></div>
         </div>
 
         <div class="boot-section stats-row">
@@ -3351,11 +3351,11 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
             <div class="curr-terminal-frame" id="currTermFrame">
               <div class="curr-term-header">
                 <span class="curr-term-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></span>
-                <span class="curr-term-title">OrbitHQ TERMINAL v2.0</span>
+                <span class="curr-term-title">10eOS TERMINAL v2.0</span>
               </div>
               <div class="curr-term-body" id="currTermBody">
-                <div class="curr-term-line"><span class="curr-term-prompt">arthq@station:~$</span> <span class="curr-term-cmd">boot curriculum_engine</span></div>
-                <div class="curr-term-line curr-term-sys">████████████████ SYSTEM READY</div>
+                <div class="curr-term-line"><span class="curr-term-prompt">10eos@hq:~$</span> <span class="curr-term-cmd">boot curriculum_engine</span></div>
+                <div class="curr-term-line curr-term-sys">████████████████ 10eOS KERNEL READY</div>
                 <div class="curr-term-line curr-term-sys">Select a quiz module to begin testing your knowledge.</div>
                 <div class="curr-term-line">&nbsp;</div>
                 <div class="curr-quiz-select" id="currQuizSelect">
@@ -3454,6 +3454,17 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
           <div style="display:flex;flex-direction:column;gap:0.5rem">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">Revenue milestones</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:#00e676;cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:all 0.3s"></div></div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">Weekly performance digest</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.15);cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.5);position:absolute;top:2px;left:2px;transition:all 0.3s"></div></div></div>
+          </div>
+        </div>
+        <!-- System Info -->
+        <div class="boot-section" style="margin-bottom:1.5rem">
+          <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">SYSTEM</h3>
+          <div style="display:flex;flex-direction:column;gap:0.4rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Operating System</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">10eOS v8.1</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Platform</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">OrbitHQ</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Publisher</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">Orbit The Arts LLC</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Rooms Online</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">14 / 14</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Domain</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">orbitarts.app</div></div>
           </div>
         </div>
         <!-- Danger Zone -->
@@ -6714,7 +6725,7 @@ function currShowSplash(){
   const main = document.getElementById('currMainContent');
   const fact = CURR_FACTS[Math.floor(Math.random()*CURR_FACTS.length)];
   document.getElementById('currSplashFact').textContent = fact.fact;
-  document.getElementById('currSplashSource').textContent = '— OrbitHQ Curriculum · ' + fact.category;
+  document.getElementById('currSplashSource').textContent = '— 10eOS Curriculum · ' + fact.category;
   splash.style.display = 'block';
   main.style.display = 'none';
   // Also hide library/terminal/progress views
