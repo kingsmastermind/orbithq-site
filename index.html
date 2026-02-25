@@ -2192,27 +2192,27 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 
         <div class="boot-section stats-row">
           <div class="stat-card">
-            <div class="stat-label">Monthly Streams</div>
-            <div class="stat-value">142.8K</div>
-            <div class="stat-change up">↑ 12.4% this month</div>
-            <div class="plat-row"><span class="plat-pill pp-spotify">Spotify</span><span class="plat-pill pp-apple">Apple</span><span class="plat-pill pp-yt">YouTube</span></div>
+            <div class="stat-label">Ascent Level</div>
+            <div class="stat-value" id="dashAscentLevel">Stardust</div>
+            <div class="stat-change neutral" id="dashAscentProgress">→ 0 of 6 milestones</div>
+            <div class="plat-row"><span class="plat-pill pp-cyan" onclick="switchRoom('identity',document.querySelector('[data-room=identity]'))">Build Profile →</span></div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Social Reach</div>
-            <div class="stat-value">89.2K</div>
-            <div class="stat-change up">↑ 8.7% this month</div>
-            <div class="plat-row"><span class="plat-pill pp-ig">IG</span><span class="plat-pill pp-tt">TikTok</span></div>
+            <div class="stat-label">CRM Pipeline</div>
+            <div class="stat-value" id="dashCrmCount">0</div>
+            <div class="stat-change neutral" id="dashCrmStatus">→ Add your first contact</div>
+            <div class="plat-row"><span class="plat-pill" style="background:rgba(100,140,255,0.1);color:rgba(130,170,255,0.9);border:1px solid rgba(100,140,255,0.2)" onclick="switchRoom('crm',document.querySelector('[data-room=crm]'))">Open CRM →</span></div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Revenue (MTD)</div>
-            <div class="stat-value">$1,247</div>
-            <div class="stat-change up">↑ 23.1% vs last month</div>
-            <div class="plat-row"><span class="plat-pill" style="background:rgba(0,230,118,0.1);color:var(--accent-green);border:1px solid rgba(0,230,118,0.2)">Streaming</span><span class="plat-pill" style="background:rgba(124,77,255,0.1);color:var(--accent-purple);border:1px solid rgba(124,77,255,0.2)">Merch</span></div>
+            <div class="stat-label">Upcoming Events</div>
+            <div class="stat-value" id="dashEventCount">0</div>
+            <div class="stat-change neutral" id="dashNextEvent">→ No events scheduled</div>
+            <div class="plat-row"><span class="plat-pill" style="background:rgba(255,171,64,0.1);color:#ffab40;border:1px solid rgba(255,171,64,0.2)" onclick="switchRoom('content',document.querySelector('[data-room=content]'))">Plan Content →</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Profile Complete</div>
-            <div class="stat-value">34%</div>
-            <div class="stat-change neutral">→ Build Identity Lab</div>
+            <div class="stat-value" id="dashProfilePct">0%</div>
+            <div class="stat-change neutral" id="dashProfileHint">→ Build Identity Lab</div>
             <div class="plat-row"><span class="plat-pill pp-cyan" onclick="switchRoom('identity',document.querySelector('[data-room=identity]'))">Set up now →</span></div>
           </div>
         </div>
@@ -2228,11 +2228,8 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
           </div>
           <div class="panel">
             <div class="panel-head"><div class="panel-title">Activity Feed</div><div class="panel-badge live">Live</div></div>
-            <div class="activity-feed">
-              <div class="activity-item"><div class="activity-dot c"></div><div class="activity-icon">📡</div><div><div class="activity-text"><strong>Stats Explorer</strong> ready — link Spotify to unlock</div><div class="activity-time">Just now</div></div></div>
+            <div class="activity-feed" id="dashActivityFeed">
               <div class="activity-item"><div class="activity-dot g"></div><div class="activity-icon">✅</div><div><div class="activity-text"><strong>OrbitHQ</strong> is live — station online</div><div class="activity-time">Today</div></div></div>
-              <div class="activity-item"><div class="activity-dot p"></div><div class="activity-icon">🪪</div><div><div class="activity-text"><strong>Identity Lab</strong> waiting — build your profile</div><div class="activity-time">Today</div></div></div>
-              <div class="activity-item"><div class="activity-dot m"></div><div class="activity-icon">▲</div><div><div class="activity-text"><strong>Launch Pad</strong> — distribution pipeline in build</div><div class="activity-time">This week</div></div></div>
             </div>
           </div>
           <div class="panel">
@@ -3390,48 +3387,50 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 
       </div><!-- /room-curriculum -->
       <div class="room" id="room-settings">
-        <div class="room-section" style="margin-bottom:1.5rem">
-          <h2 style="font-family:'Orbitron',sans-serif;font-size:1.1rem;color:#90a4ae;margin-bottom:0.3rem">⚙️ Settings</h2>
-          <p style="font-size:0.7rem;color:rgba(232,234,246,0.4);letter-spacing:1px">ACCOUNT · CONNECTIONS · PREFERENCES · BILLING</p>
+        <div class="boot-section room-header" style="margin-bottom:0">
+          <div>
+            <div class="room-label">System</div>
+            <div class="room-title">Settings</div>
+            <div class="room-subtitle">Account · Connections · Preferences · Billing</div>
+          </div>
+          <div class="room-status"><div class="status-dot green"></div> Active</div>
         </div>
         <!-- Account Info -->
-        <div class="room-section" style="margin-bottom:1.5rem">
+        <div class="boot-section" style="margin-bottom:1.5rem">
           <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">ACCOUNT</h3>
           <div style="display:flex;flex-direction:column;gap:0.6rem">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">DISPLAY NAME</div><div style="color:#e8eaf6;font-size:0.75rem">10eo</div></div><button onclick="stEdit(this)" style="background:rgba(144,164,174,0.1);border:1px solid rgba(144,164,174,0.2);color:#90a4ae;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace">Edit</button></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">EMAIL</div><div style="color:#e8eaf6;font-size:0.75rem"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c3b7a6ada6acaeb6b0aaa083a4aea2aaafeda0acae">[email&#160;protected]</a></div></div><button onclick="stEdit(this)" style="background:rgba(144,164,174,0.1);border:1px solid rgba(144,164,174,0.2);color:#90a4ae;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace">Edit</button></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">PLAN</div><div style="color:#ce93d8;font-size:0.75rem">Orbit Pro · $14.99/mo</div></div><button onclick="switchRoom('pricing',null)" style="background:rgba(206,147,216,0.1);border:1px solid rgba(206,147,216,0.2);color:#ce93d8;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace">Manage</button></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">PASSWORD</div><div style="color:#e8eaf6;font-size:0.75rem">••••••••••••</div></div><button onclick="stEdit(this)" style="background:rgba(144,164,174,0.1);border:1px solid rgba(144,164,174,0.2);color:#90a4ae;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace">Change</button></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">CALLSIGN</div><div style="color:#e8eaf6;font-size:0.75rem" id="stCallsign">—</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">DISPLAY NAME</div><div style="color:#e8eaf6;font-size:0.75rem" id="stDisplayName">—</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">EMAIL</div><div style="color:#e8eaf6;font-size:0.75rem" id="stEmail">—</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">ASCENT LEVEL</div><div style="color:#ce93d8;font-size:0.75rem" id="stAscentLevel">Stardust</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div><div style="color:rgba(232,234,246,0.4);font-size:0.5rem;font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:0.3rem">ROLE</div><div style="color:#e8eaf6;font-size:0.75rem" id="stRole">—</div></div></div>
           </div>
         </div>
-        <!-- Connected Platforms -->
-        <div class="room-section" style="margin-bottom:1.5rem">
-          <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">CONNECTED PLATFORMS</h3>
-          <div style="display:flex;flex-direction:column;gap:0.4rem">
-            <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.15);border-radius:8px"><div style="color:#1ed760;font-size:0.8rem;min-width:24px;text-align:center">♫</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">Spotify for Artists</div><div style="color:#00e676;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(0,230,118,0.2);border-radius:12px">Connected</div></div>
-            <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(252,60,68,0.04);border:1px solid rgba(252,60,68,0.12);border-radius:8px"><div style="color:#fc3c44;font-size:0.8rem;min-width:24px;text-align:center">♫</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">Apple Music for Artists</div><div style="color:#00e676;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(0,230,118,0.2);border-radius:12px">Connected</div></div>
-            <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(225,48,108,0.04);border:1px solid rgba(225,48,108,0.12);border-radius:8px"><div style="color:#e1306c;font-size:0.8rem;min-width:24px;text-align:center">◎</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">Instagram</div><div style="color:#00e676;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(0,230,118,0.2);border-radius:12px">Connected</div></div>
-            <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.8rem;min-width:24px;text-align:center">▶</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">YouTube</div><div style="color:#ffab40;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(255,171,64,0.2);border-radius:12px;cursor:pointer" onclick="alert('Connect YouTube — OAuth flow coming in v7')">Connect</div></div>
-            <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.8rem;min-width:24px;text-align:center">♪</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">TikTok</div><div style="color:#ffab40;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(255,171,64,0.2);border-radius:12px;cursor:pointer" onclick="alert('Connect TikTok — OAuth flow coming in v7')">Connect</div></div>
-            <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.8rem;min-width:24px;text-align:center">$</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">DistroKid</div><div style="color:#ffab40;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(255,171,64,0.2);border-radius:12px;cursor:pointer" onclick="alert('Connect DistroKid — API integration coming in v7')">Connect</div></div>
+        <!-- Connected Platforms — Dynamic -->
+        <div class="boot-section" style="margin-bottom:1.5rem">
+          <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">CONNECTED PLATFORMS · <span id="stPlatCount">0</span> linked</h3>
+          <div style="display:flex;flex-direction:column;gap:0.4rem" id="stPlatformList">
+            <div style="text-align:center;padding:1rem;color:rgba(232,234,246,0.2);font-size:0.7rem">Loading platforms...</div>
           </div>
         </div>
-        <!-- Notifications -->
-        <div class="room-section" style="margin-bottom:1.5rem">
+        <!-- Ascent Milestones -->
+        <div class="boot-section" style="margin-bottom:1.5rem">
+          <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">THE ASCENT — MILESTONES</h3>
+          <div style="display:flex;flex-direction:column;gap:0.4rem" id="stMilestoneList"></div>
+        </div>
+        <!-- Notifications (keep existing) -->
+        <div class="boot-section" style="margin-bottom:1.5rem">
           <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">NOTIFICATIONS</h3>
           <div style="display:flex;flex-direction:column;gap:0.5rem">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">Revenue milestones</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:#00e676;cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:all 0.3s"></div></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">Stream count alerts</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:#00e676;cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:all 0.3s"></div></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">New playlist additions</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:#00e676;cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:all 0.3s"></div></div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">Weekly performance digest</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.15);cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.5);position:absolute;top:2px;left:2px;transition:all 0.3s"></div></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:#e8eaf6;font-size:0.68rem">Email marketing updates</div><div onclick="stToggle(this)" style="width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.15);cursor:pointer;position:relative;transition:background 0.3s"><div style="width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.5);position:absolute;top:2px;left:2px;transition:all 0.3s"></div></div></div>
           </div>
         </div>
         <!-- Danger Zone -->
-        <div class="room-section">
+        <div class="boot-section">
           <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(255,82,82,0.6);letter-spacing:2px;margin-bottom:0.8rem">DANGER ZONE</h3>
           <div style="padding:0.8rem;border:1px solid rgba(255,82,82,0.2);border-radius:8px;background:rgba(255,82,82,0.03)">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem"><div style="color:rgba(232,234,246,0.5);font-size:0.65rem">Export all data</div><button style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(232,234,246,0.5);padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace" onclick="alert('Data export — generates CSV/JSON bundle of all your OrbitHQ data')">Export</button></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem"><div style="color:rgba(232,234,246,0.5);font-size:0.65rem">Sign out</div><button onclick="logout()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(232,234,246,0.5);padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace">Undock</button></div>
             <div style="display:flex;justify-content:space-between;align-items:center"><div style="color:rgba(255,82,82,0.6);font-size:0.65rem">Delete account</div><button style="background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.2);color:#ff5252;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.55rem;font-family:'Space Mono',monospace" onclick="alert('This action is permanent. Type DELETE to confirm.')">Delete</button></div>
           </div>
         </div>
@@ -4234,9 +4233,14 @@ function switchRoom(roomId, navEl) {
         if (roomId === 'identity') setTimeout(idlabLoadProfile, 200);
         if (roomId === 'frequency') setTimeout(frequencyInit, 200);
         if (roomId === 'crm') setTimeout(crmInit, 200);
+        if (roomId === 'dashboard') setTimeout(dashInit, 200);
+        if (roomId === 'settings') setTimeout(settingsInit, 200);
+        if (roomId === 'launch') setTimeout(lpInit, 200);
       }
       // Every-visit refreshes (not just first boot)
       if (roomId === 'content') setTimeout(csBootDB, 300);
+      if (roomId === 'dashboard') setTimeout(dashInit, 300);
+      if (roomId === 'settings') setTimeout(settingsInit, 300);
     }
     isTransitioning = false;
   }, 120);
@@ -8696,6 +8700,211 @@ function _freqStartEnv() {
   }
   if (_freqEnvAnim) cancelAnimationFrame(_freqEnvAnim);
   _freqEnvAnim = requestAnimationFrame(draw);
+}
+
+// ── DASHBOARD — Live Supabase Data ──
+async function dashInit() {
+  if (!_currentUser) return;
+  try {
+    // Ascent level + milestones
+    const milestoneCount = _userMilestones.size;
+    const level = _getAscentLevel(milestoneCount);
+    const levelName = level.charAt(0).toUpperCase() + level.slice(1);
+    document.getElementById('dashAscentLevel').textContent = levelName;
+    const prog = document.getElementById('dashAscentProgress');
+    if (milestoneCount >= 6) { prog.textContent = '★ All milestones complete!'; prog.className = 'stat-change up'; }
+    else { prog.textContent = '→ ' + milestoneCount + ' of 6 milestones'; }
+
+    // Profile completion (name + bio + genre + platforms)
+    const { data: profile } = await _sb.from('profiles').select('display_name,bio,genre,social_links,dsp_links').eq('id', _currentUser.id).single();
+    if (profile) {
+      let pctParts = 0, pctTotal = 5;
+      if (profile.display_name) pctParts++;
+      if (profile.bio && profile.bio.length > 10) pctParts++;
+      if (profile.genre) pctParts++;
+      const dspCount = profile.dsp_links ? Object.values(profile.dsp_links).filter(v=>v).length : 0;
+      const socCount = profile.social_links ? Object.values(profile.social_links).filter(v=>v).length : 0;
+      if (dspCount > 0) pctParts++;
+      if (socCount > 0) pctParts++;
+      const pct = Math.round((pctParts / pctTotal) * 100);
+      document.getElementById('dashProfilePct').textContent = pct + '%';
+      const hint = document.getElementById('dashProfileHint');
+      if (pct >= 100) { hint.textContent = '★ Profile complete!'; hint.className = 'stat-change up'; }
+      else if (pct >= 60) { hint.textContent = '↑ Almost there'; hint.className = 'stat-change up'; }
+      else { hint.textContent = '→ Build Identity Lab'; }
+    }
+
+    // CRM contacts
+    const { data: contacts } = await _sb.from('crm_contacts').select('id,status').eq('user_id', _currentUser.id);
+    const crmTotal = contacts ? contacts.length : 0;
+    document.getElementById('dashCrmCount').textContent = crmTotal;
+    const crmSt = document.getElementById('dashCrmStatus');
+    if (crmTotal > 0) {
+      const active = contacts.filter(c => c.status === 'contacted' || c.status === 'in_conversation').length;
+      crmSt.textContent = active > 0 ? '↑ ' + active + ' active conversations' : '→ ' + crmTotal + ' in pipeline';
+      if (active > 0) crmSt.className = 'stat-change up';
+    }
+
+    // Calendar events
+    const { data: events } = await _sb.from('calendar').select('id,title,scheduled_at,event_type').eq('user_id', _currentUser.id).gte('scheduled_at', new Date().toISOString()).order('scheduled_at', { ascending: true }).limit(5);
+    const evCount = events ? events.length : 0;
+    document.getElementById('dashEventCount').textContent = evCount;
+    const nextEv = document.getElementById('dashNextEvent');
+    if (evCount > 0) {
+      const nxt = events[0];
+      const d = new Date(nxt.scheduled_at);
+      nextEv.textContent = '→ ' + nxt.title + ' · ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Activity feed — build from real data
+    const feed = document.getElementById('dashActivityFeed');
+    const items = [];
+    if (milestoneCount >= 6) items.push({ icon: '⭐', text: '<strong>The Ascent</strong> — reached ' + levelName + '!', dot: 'g', time: 'Achievement' });
+    else if (milestoneCount > 0) items.push({ icon: '▲', text: '<strong>The Ascent</strong> — ' + milestoneCount + ' milestones earned', dot: 'c', time: 'Progress' });
+    if (crmTotal > 0) items.push({ icon: '📡', text: '<strong>CRM</strong> — ' + crmTotal + ' contact' + (crmTotal!==1?'s':'') + ' in pipeline', dot: 'c', time: 'Active' });
+    if (evCount > 0) items.push({ icon: '📅', text: '<strong>Content Studio</strong> — ' + evCount + ' upcoming event' + (evCount!==1?'s':''), dot: 'p', time: 'Scheduled' });
+    items.push({ icon: '✅', text: '<strong>OrbitHQ</strong> is live — station online', dot: 'g', time: 'Today' });
+    if (!profile?.display_name) items.push({ icon: '🪪', text: '<strong>Identity Lab</strong> — build your profile', dot: 'p', time: 'Action' });
+    feed.innerHTML = items.map(i => `<div class="activity-item"><div class="activity-dot ${i.dot}"></div><div class="activity-icon">${i.icon}</div><div><div class="activity-text">${i.text}</div><div class="activity-time">${i.time}</div></div></div>`).join('');
+
+    console.log('[Dashboard] Loaded live data');
+  } catch(e) { console.error('[Dashboard] Init error:', e); }
+}
+
+// ── SETTINGS — Account Management ──
+const _platformMeta = {
+  spotify:     { icon:'🎵', name:'Spotify', color:'#1ed760' },
+  apple_music: { icon:'🍎', name:'Apple Music', color:'#fc3c44' },
+  youtube:     { icon:'▶️', name:'YouTube', color:'#ff0000' },
+  soundcloud:  { icon:'☁️', name:'SoundCloud', color:'#ff5500' },
+  tidal:       { icon:'🌊', name:'Tidal', color:'#00e5ff' },
+  audiomack:   { icon:'🎧', name:'Audiomack', color:'#ff8214' },
+  bandcamp:    { icon:'⛺', name:'Bandcamp', color:'#1da0c3' },
+  instagram:   { icon:'📸', name:'Instagram', color:'#e1306c' },
+  tiktok:      { icon:'🎵', name:'TikTok', color:'#00f2ea' },
+  twitter:     { icon:'𝕏', name:'X / Twitter', color:'#e6ecf0' },
+  facebook:    { icon:'👤', name:'Facebook', color:'#4267b2' }
+};
+
+async function settingsInit() {
+  if (!_currentUser) return;
+  try {
+    // Account info
+    const callsign = _currentUser.user_metadata?.callsign || _currentUser.email?.split('@')[0] || '—';
+    document.getElementById('stCallsign').textContent = callsign;
+    document.getElementById('stEmail').textContent = _currentUser.email || '—';
+
+    const { data: profile } = await _sb.from('profiles').select('*').eq('id', _currentUser.id).single();
+    if (profile) {
+      document.getElementById('stDisplayName').textContent = profile.display_name || '—';
+      document.getElementById('stRole').textContent = (profile.role || 'artist').charAt(0).toUpperCase() + (profile.role || 'artist').slice(1);
+      const level = profile.ascent_level || _getAscentLevel(_userMilestones.size);
+      document.getElementById('stAscentLevel').textContent = level.charAt(0).toUpperCase() + level.slice(1);
+
+      // Connected platforms
+      const dsp = profile.dsp_links || {};
+      const soc = profile.social_links || {};
+      const all = { ...dsp, ...soc };
+      const connected = Object.entries(all).filter(([k,v]) => v && v.trim());
+      const notConnected = Object.keys(_platformMeta).filter(k => !all[k] || !all[k].trim());
+      document.getElementById('stPlatCount').textContent = connected.length;
+      const platEl = document.getElementById('stPlatformList');
+      let html = '';
+      connected.forEach(([key, url]) => {
+        const m = _platformMeta[key] || { icon:'🔗', name: key, color:'#90a4ae' };
+        html += `<div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(0,230,118,0.03);border:1px solid rgba(0,230,118,0.12);border-radius:8px"><div style="color:${m.color};font-size:0.8rem;min-width:24px;text-align:center">${m.icon}</div><div style="flex:1;color:#e8eaf6;font-size:0.68rem">${m.name}</div><div style="color:#00e676;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(0,230,118,0.2);border-radius:12px">Connected</div></div>`;
+      });
+      notConnected.forEach(key => {
+        const m = _platformMeta[key];
+        html += `<div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.3);font-size:0.8rem;min-width:24px;text-align:center">${m.icon}</div><div style="flex:1;color:rgba(232,234,246,0.5);font-size:0.68rem">${m.name}</div><div style="color:#ffab40;font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid rgba(255,171,64,0.2);border-radius:12px;cursor:pointer" onclick="switchRoom('identity',document.querySelector('[data-room=identity]'))">Connect</div></div>`;
+      });
+      platEl.innerHTML = html;
+    }
+
+    // Milestones list
+    const allMilestones = [
+      { key: 'identity_complete', label: 'Complete Identity Lab Profile', icon: '🪪' },
+      { key: 'dsp_connected', label: 'Connect a DSP Platform', icon: '🎵' },
+      { key: 'first_rsp', label: 'Schedule First RSP Broadcast', icon: '📡' },
+      { key: 'vault_upload', label: 'Upload to The Vault', icon: '🏆' },
+      { key: 'curriculum_module', label: 'Master a Curriculum Card', icon: '🎓' },
+      { key: 'first_crm_contact', label: 'Add First CRM Contact', icon: '📡' }
+    ];
+    const mList = document.getElementById('stMilestoneList');
+    mList.innerHTML = allMilestones.map(m => {
+      const done = _userMilestones.has(m.key);
+      return `<div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:rgba(${done?'0,230,118':'255,255,255'},0.03);border:1px solid rgba(${done?'0,230,118,0.15':'255,255,255,0.08'});border-radius:8px"><div style="font-size:0.8rem;min-width:24px;text-align:center">${m.icon}</div><div style="flex:1;color:${done?'#e8eaf6':'rgba(232,234,246,0.4)'};font-size:0.68rem">${m.label}</div><div style="color:${done?'#00e676':'rgba(232,234,246,0.2)'};font-size:0.5rem;font-family:'Space Mono',monospace">${done?'✓ EARNED':'○ LOCKED'}</div></div>`;
+    }).join('');
+
+    console.log('[Settings] Loaded account data');
+  } catch(e) { console.error('[Settings] Init error:', e); }
+}
+
+// ── LAUNCH PAD — Calendar-Wired Releases ──
+let _lpReleases = [];
+async function lpInit() {
+  if (!_currentUser) return;
+  try {
+    const { data, error } = await _sb.from('calendar').select('*').eq('user_id', _currentUser.id).eq('event_type', 'release').order('scheduled_at', { ascending: true });
+    if (error) throw error;
+    _lpReleases = data || [];
+    lpRenderReleases();
+    console.log('[LaunchPad] Loaded', _lpReleases.length, 'releases');
+  } catch(e) { console.error('[LaunchPad] Init error:', e); }
+}
+
+function lpRenderReleases() {
+  // Update active release card if we have data
+  const activePanel = document.querySelector('#room-launch .room-section:nth-child(2) > div:last-child');
+  if (!activePanel) return;
+  const upcoming = _lpReleases.filter(r => new Date(r.scheduled_at) > new Date());
+  const past = _lpReleases.filter(r => new Date(r.scheduled_at) <= new Date());
+  if (upcoming.length > 0) {
+    const rel = upcoming[0];
+    const d = new Date(rel.scheduled_at);
+    const daysOut = Math.ceil((d - new Date()) / (1000*60*60*24));
+    const weekNum = Math.max(1, Math.min(8, 8 - Math.floor(daysOut / 7)));
+    const pct = Math.round((weekNum / 8) * 100);
+    activePanel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem">
+        <div><div style="color:#ff6e40;font-family:'Orbitron',sans-serif;font-size:0.85rem;margin-bottom:0.3rem">${esc(rel.title)}</div><div style="color:rgba(232,234,246,0.4);font-size:0.6rem;font-family:'Space Mono',monospace">Release: ${d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${daysOut} days out</div></div>
+        <div style="color:#ffab40;font-size:0.6rem;font-family:'Space Mono',monospace;padding:0.25rem 0.6rem;border:1px solid rgba(255,171,64,0.3);border-radius:12px">Week ${weekNum} of 8</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:6px;height:8px;margin-bottom:0.8rem;overflow:hidden"><div style="background:linear-gradient(90deg,#ff6e40,#ffab40);height:100%;width:${pct}%;border-radius:6px;transition:width 0.5s"></div></div>
+      <div style="color:rgba(232,234,246,0.3);font-size:0.55rem;font-family:'Space Mono',monospace">Status: ${rel.status || 'scheduled'} · Type: ${rel.event_type}</div>
+      ${rel.description ? '<div style="color:rgba(232,234,246,0.4);font-size:0.65rem;margin-top:0.5rem">'+esc(rel.description)+'</div>' : ''}
+    `;
+  }
+}
+
+// Override lpNewRelease to actually create a release event
+function lpNewRelease() {
+  const title = prompt('Release title (e.g. "Night Drive — Single"):');
+  if (!title) return;
+  const dateStr = prompt('Release date (YYYY-MM-DD):');
+  if (!dateStr) return;
+  const desc = prompt('Description (optional):') || '';
+  lpCreateRelease(title, dateStr, desc);
+}
+
+async function lpCreateRelease(title, dateStr, desc) {
+  if (!_currentUser) return;
+  try {
+    const { data, error } = await _sb.from('calendar').insert({
+      user_id: _currentUser.id,
+      title: title,
+      description: desc || null,
+      event_type: 'release',
+      scheduled_at: dateStr + 'T00:00:00Z',
+      status: 'scheduled'
+    }).select().single();
+    if (error) throw error;
+    _lpReleases.push(data);
+    _lpReleases.sort((a,b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+    lpRenderReleases();
+    orbitalConfirm('RELEASE QUEUED','transmit');
+    console.log('[LaunchPad] Created release:', title);
+  } catch(e) { console.error('[LaunchPad] Create error:', e); orbitalConfirm('CREATE FAILED','alert'); }
 }
 
 // ── CRM CITYSCAPE ENVIRONMENT — Night skyline projected on glass ──
