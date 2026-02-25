@@ -53,8 +53,17 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 .login-btn { width:100%; padding:0.85rem; margin-top:0.8rem; font-family:'Space Mono',monospace; font-size:0.7rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.12); cursor:pointer; transition:all 0.3s ease; }
 .login-btn:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.25); color:rgba(255,255,255,0.9); }
 @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-2px)}90%{transform:translateX(2px)}}
-@keyframes neonFlash{0%{opacity:0;transform:translate(-50%,-50%) scale(0.2);text-shadow:0 0 0 transparent;filter:blur(8px);letter-spacing:6px}5%{opacity:0.5;transform:translate(-50%,-50%) scale(1.2);filter:blur(3px)}10%{opacity:1;transform:translate(-50%,-50%) scale(3);text-shadow:0 0 40px rgba(0,230,118,1),0 0 100px rgba(0,230,118,0.8),0 0 180px rgba(0,230,118,0.5),0 0 300px rgba(0,230,118,0.2);filter:blur(0)}18%{transform:translate(-50%,-50%) scale(2.2);text-shadow:0 0 30px rgba(0,230,118,0.9),0 0 80px rgba(0,230,118,0.5),0 0 150px rgba(0,230,118,0.3)}28%{transform:translate(-50%,-50%) scale(1.4);text-shadow:0 0 20px rgba(0,230,118,0.7),0 0 50px rgba(0,230,118,0.3)}36%{transform:translate(-50%,-50%) scale(1.15);text-shadow:0 0 12px rgba(0,230,118,0.5),0 0 30px rgba(0,230,118,0.2);opacity:1}42%{transform:translate(-50%,-50%) scale(1.1);text-shadow:0 0 10px rgba(0,230,118,0.4),0 0 25px rgba(0,230,118,0.15)}62%{transform:translate(-50%,-50%) scale(1.1);text-shadow:0 0 10px rgba(0,230,118,0.4),0 0 25px rgba(0,230,118,0.15);opacity:1;letter-spacing:6px;filter:blur(0)}72%{transform:translate(-50%,-50%) scale(1.1) scaleY(0.8);text-shadow:0 0 20px rgba(0,230,118,0.9),0 0 60px rgba(0,230,118,0.5),0 0 120px rgba(0,230,118,0.3);opacity:0.9;letter-spacing:12px;filter:blur(0)}82%{transform:translate(-50%,-50%) scale(1.2) scaleX(2.5) scaleY(0.3);text-shadow:0 0 30px rgba(0,230,118,1),0 0 80px rgba(0,230,118,0.6),0 0 160px rgba(0,230,118,0.3);opacity:0.7;letter-spacing:25px;filter:blur(1px)}92%{transform:translate(-50%,-50%) scale(1) scaleX(5) scaleY(0.05);text-shadow:0 0 15px rgba(0,230,118,0.5),0 0 60px rgba(0,230,118,0.2);opacity:0.3;letter-spacing:50px;filter:blur(3px)}100%{transform:translate(-50%,-50%) scale(1) scaleX(8) scaleY(0);text-shadow:0 0 0 transparent;opacity:0;letter-spacing:80px;filter:blur(6px)}}
-@keyframes neonFlashFail{0%{opacity:0;transform:translate(-50%,-50%) scale(0.2);text-shadow:0 0 0 transparent;filter:blur(8px);letter-spacing:6px}5%{opacity:0.5;transform:translate(-50%,-50%) scale(1.2);filter:blur(3px)}10%{opacity:1;transform:translate(-50%,-50%) scale(3);text-shadow:0 0 40px rgba(255,68,68,1),0 0 100px rgba(255,68,68,0.8),0 0 180px rgba(255,68,68,0.5),0 0 300px rgba(255,68,68,0.2);filter:blur(0)}18%{transform:translate(-50%,-50%) scale(2.2);text-shadow:0 0 30px rgba(255,68,68,0.9),0 0 80px rgba(255,68,68,0.5),0 0 150px rgba(255,68,68,0.3)}28%{transform:translate(-50%,-50%) scale(1.4);text-shadow:0 0 20px rgba(255,68,68,0.7),0 0 50px rgba(255,68,68,0.3)}36%{transform:translate(-50%,-50%) scale(1.15);text-shadow:0 0 12px rgba(255,68,68,0.5),0 0 30px rgba(255,68,68,0.2);opacity:1}42%{transform:translate(-50%,-50%) scale(1.1);text-shadow:0 0 10px rgba(255,68,68,0.4),0 0 25px rgba(255,68,68,0.15)}62%{transform:translate(-50%,-50%) scale(1.1);text-shadow:0 0 10px rgba(255,68,68,0.4),0 0 25px rgba(255,68,68,0.15);opacity:1;letter-spacing:6px;filter:blur(0)}72%{transform:translate(-50%,-50%) scale(1.1) scaleY(0.8);text-shadow:0 0 20px rgba(255,68,68,0.9),0 0 60px rgba(255,68,68,0.5),0 0 120px rgba(255,68,68,0.3);opacity:0.9;letter-spacing:12px;filter:blur(0)}82%{transform:translate(-50%,-50%) scale(1.2) scaleX(2.5) scaleY(0.3);text-shadow:0 0 30px rgba(255,68,68,1),0 0 80px rgba(255,68,68,0.6),0 0 160px rgba(255,68,68,0.3);opacity:0.7;letter-spacing:25px;filter:blur(1px)}92%{transform:translate(-50%,-50%) scale(1) scaleX(5) scaleY(0.05);text-shadow:0 0 15px rgba(255,68,68,0.5),0 0 60px rgba(255,68,68,0.2);opacity:0.3;letter-spacing:50px;filter:blur(3px)}100%{transform:translate(-50%,-50%) scale(1) scaleX(8) scaleY(0);text-shadow:0 0 0 transparent;opacity:0;letter-spacing:80px;filter:blur(6px)}}
+/* ── ORBITAL CONFIRMATION SYSTEM ── */
+.orb-confirm{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease}
+.orb-confirm.active{opacity:1}
+.orb-confirm-inner{position:relative;display:flex;align-items:center;justify-content:center}
+.orb-confirm-text{font-family:'Orbitron',monospace;font-weight:800;font-size:1.1rem;letter-spacing:8px;text-transform:uppercase;position:relative;white-space:nowrap;opacity:0}
+.orb-confirm-scanline{position:absolute;top:0;left:-5%;width:110%;height:100%;pointer-events:none;overflow:hidden;opacity:0}
+.orb-confirm-scanline::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:40%;background:linear-gradient(180deg,transparent,currentColor 50%,transparent);opacity:0.08;animation:orbScan 1.5s linear infinite}
+.orb-confirm-glow{position:absolute;top:50%;left:50%;width:300px;height:300px;border-radius:50%;transform:translate(-50%,-50%) scale(0);filter:blur(80px);opacity:0;transition:none}
+.orb-confirm-hline{position:absolute;top:50%;left:50%;height:2px;transform:translate(-50%,-50%);opacity:0;border-radius:1px}
+@keyframes orbScan{0%{top:-40%}100%{top:100%}}
+
 .login-btn.docking { animation:crtDockPulse 0.8s ease infinite; }
 .login-divider { display:flex; align-items:center; gap:1rem; margin:1.2rem 0; }
 .login-divider::before,.login-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.05); }
@@ -2215,7 +2224,6 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
               </div>
             </div>
             <div class="action-row"><button class="btn-primary" id="idlab-save-btn" onclick="idlabSaveProfile()">Save Profile</button></div>
-<div id="idlab-save-status" style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);z-index:9999;font-family:'Orbitron',monospace;font-size:1rem;font-weight:800;letter-spacing:6px;color:rgba(0,230,118,0.95);pointer-events:none;opacity:0"></div>
           </div>
           <div class="identity-card">
             <div class="card-title">Profile Preview</div>
@@ -5521,7 +5529,6 @@ async function idlabLoadProfile() {
 async function idlabSaveProfile() {
   if (!_currentUser) return;
   const btn = document.getElementById('idlab-save-btn');
-  const status = document.getElementById('idlab-save-status');
   btn.disabled = true; btn.textContent = '[ Saving... ]';
   // Collect genres
   const genres = [];
@@ -5544,17 +5551,14 @@ async function idlabSaveProfile() {
     if (error) throw error;
     // Success feedback
     btn.textContent = '[ Saved ✓ ]';
-    status.textContent = 'PROFILE SYNCED'; status.style.color='rgba(0,230,118,0.9)';
-    status.style.animation='none'; void status.offsetWidth; status.style.animation='neonFlash 3s cubic-bezier(0.25,0.1,0.25,1) forwards';
+    orbitalConfirm('PROFILE SYNCED', 'sync');
     setTimeout(() => { btn.textContent = 'Save Profile'; btn.disabled = false; }, 2000);
     // Update preview live
     idlabUpdatePreview(updates);
   } catch (e) {
     console.error('Save error:', e);
     btn.textContent = 'Save Profile'; btn.disabled = false;
-    status.textContent = 'SYS: SAVE FAILED'; status.style.color = '#ff4444';
-    status.style.animation='none'; void status.offsetWidth; status.style.animation='neonFlashFail 3s cubic-bezier(0.25,0.1,0.25,1) forwards';
-    setTimeout(() => { status.style.color = 'rgba(0,230,118,0.7)'; }, 3000);
+    orbitalConfirm('SYNC FAILED', 'alert');
   }
 }
 
@@ -5570,6 +5574,110 @@ function idlabUpdatePreview(data) {
     const genres = data.genre.split(',').map(g => g.trim()).filter(Boolean);
     el('idlab-preview-genres').innerHTML = genres.map(g => '<span class="preview-genre">' + g + '</span>').join('');
   }
+}
+
+// ── ORBITAL CONFIRMATION ENGINE ──
+// Usage: orbitalConfirm('TEXT', 'sync'|'locked'|'alert'|'transmit')
+const _orbStyles = {
+  sync:     { color:'0,230,118', label:'sync' },
+  locked:   { color:'0,229,255', label:'locked' },
+  alert:    { color:'255,68,68', label:'alert' },
+  transmit: { color:'255,210,64', label:'transmit' }
+};
+let _orbBusy = false;
+
+function orbitalConfirm(text, type='sync') {
+  if (_orbBusy) return;
+  _orbBusy = true;
+  const s = _orbStyles[type] || _orbStyles.sync;
+  const c = s.color;
+  const overlay = document.getElementById('orbConfirm');
+  const txt = document.getElementById('orbText');
+  const glow = document.getElementById('orbGlow');
+  const hline = document.getElementById('orbHline');
+  const scan = txt.querySelector('.orb-confirm-scanline');
+
+  // Reset
+  txt.textContent = text;
+  txt.appendChild(scan);
+  txt.style.cssText = 'opacity:0;transform:scaleY(0.02) scaleX(1);color:rgba('+c+',0.95);text-shadow:none;filter:blur(0);letter-spacing:8px;font-size:1.1rem;transition:none';
+  glow.style.cssText = 'transform:translate(-50%,-50%) scale(0);opacity:0;background:rgba('+c+',0.15);transition:none';
+  hline.style.cssText = 'width:0;opacity:0;background:rgba('+c+',0.9);box-shadow:0 0 20px rgba('+c+',0.8),0 0 60px rgba('+c+',0.4);transition:none';
+  scan.style.cssText = 'opacity:0;color:rgba('+c+',1)';
+  overlay.classList.add('active');
+
+  // Phase 1: POWER ON — horizontal line draws, then text expands from it
+  requestAnimationFrame(() => {
+    hline.style.transition = 'width 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.15s ease';
+    hline.style.width = '280px';
+    hline.style.opacity = '1';
+    glow.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease';
+    glow.style.transform = 'translate(-50%,-50%) scale(1)';
+    glow.style.opacity = '1';
+  });
+
+  // Phase 2: MATERIALIZE — text expands vertically from the line
+  setTimeout(() => {
+    hline.style.transition = 'opacity 0.4s ease';
+    hline.style.opacity = '0';
+    txt.style.transition = 'opacity 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1), text-shadow 0.5s ease';
+    txt.style.opacity = '1';
+    txt.style.transform = 'scaleY(1) scaleX(1)';
+    txt.style.textShadow = '0 0 15px rgba('+c+',0.6), 0 0 40px rgba('+c+',0.25)';
+    scan.style.transition = 'opacity 0.3s ease';
+    scan.style.opacity = '1';
+  }, 350);
+
+  // Phase 3: HOLD — gentle glow pulse
+  setTimeout(() => {
+    txt.style.transition = 'text-shadow 0.8s ease';
+    txt.style.textShadow = '0 0 8px rgba('+c+',0.4), 0 0 25px rgba('+c+',0.15)';
+    setTimeout(() => {
+      txt.style.textShadow = '0 0 15px rgba('+c+',0.6), 0 0 40px rgba('+c+',0.25)';
+    }, 400);
+  }, 850);
+
+  // Phase 4: CRT SHUTDOWN — compress to line, flash, vanish
+  setTimeout(() => {
+    scan.style.transition = 'opacity 0.2s ease';
+    scan.style.opacity = '0';
+    // Compress text to thin line
+    txt.style.transition = 'transform 0.45s cubic-bezier(0.5,0,0.75,0), text-shadow 0.3s ease, filter 0.3s ease, letter-spacing 0.45s ease';
+    txt.style.transform = 'scaleY(0.015) scaleX(1.1)';
+    txt.style.textShadow = '0 0 25px rgba('+c+',1), 0 0 60px rgba('+c+',0.7), 0 0 120px rgba('+c+',0.3)';
+    txt.style.letterSpacing = '12px';
+    // Glow intensifies during compress
+    glow.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    glow.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    glow.style.opacity = '0.8';
+  }, 1800);
+
+  // Phase 5: FLASH + line reappears bright
+  setTimeout(() => {
+    hline.style.transition = 'width 0.15s ease, opacity 0.1s ease';
+    hline.style.width = '320px';
+    hline.style.opacity = '1';
+    hline.style.height = '3px';
+    hline.style.boxShadow = '0 0 30px rgba('+c+',1), 0 0 80px rgba('+c+',0.6), 0 0 150px rgba('+c+',0.3)';
+    txt.style.opacity = '0';
+  }, 2250);
+
+  // Phase 6: Line contracts to point and vanishes
+  setTimeout(() => {
+    hline.style.transition = 'width 0.35s cubic-bezier(0.5,0,0.75,0), opacity 0.3s ease 0.15s, box-shadow 0.3s ease';
+    hline.style.width = '0';
+    hline.style.boxShadow = '0 0 60px rgba('+c+',1), 0 0 120px rgba('+c+',0.5)';
+    glow.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    glow.style.opacity = '0';
+    glow.style.transform = 'translate(-50%,-50%) scale(0.3)';
+  }, 2400);
+
+  // Cleanup
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    hline.style.height = '2px';
+    _orbBusy = false;
+  }, 2900);
 }
 
 // ════ CURRICULUM ENGINE — SPACE STATION LIBRARY ════
@@ -7281,5 +7389,6 @@ envActive = 'lobby';
 if (envCanvas) { envCanvas.style.opacity = '1'; envLoop(); }
 
 </script>
+<div class="orb-confirm" id="orbConfirm"><div class="orb-confirm-inner"><div class="orb-confirm-glow" id="orbGlow"></div><div class="orb-confirm-hline" id="orbHline"></div><div class="orb-confirm-text" id="orbText"><div class="orb-confirm-scanline"></div></div></div></div>
 </body>
 </html>
