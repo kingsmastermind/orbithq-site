@@ -54,6 +54,10 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 .login-btn:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.25); color:rgba(255,255,255,0.9); }
 @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-2px)}90%{transform:translateX(2px)}}
 /* ── ORBITAL CONFIRMATION SYSTEM ── */
+/* ── IDENTITY RESIDUE ENGINE ── */
+#orbResidue { position:fixed; top:0; left:0; width:100%; height:100%; z-index:99998; pointer-events:none; display:none; }
+#orbResidue.active { display:block; }
+#orbResCanvas { width:100%; height:100%; }
 .orb-confirm{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease}
 .orb-confirm.active{opacity:1}
 .orb-confirm-inner{position:relative;display:flex;align-items:center;justify-content:center}
@@ -5615,17 +5619,37 @@ function idlabTogglePlatform(tile) {
 function idlabCommitPlatform(input) {
   const tile = input.closest('.ptile');
   const url = input.value.trim();
+  const platform = input.dataset.key;
   if (url) {
     tile.classList.add('connected');
     tile.classList.remove('expanded');
     tile.querySelector('.ptile-status').textContent = 'Connected';
-    orbitalConfirm(tile.querySelector('.ptile-name').textContent.toUpperCase() + ' LINKED', 'sync');
+    // Extract handle from URL for residue display
+    const handle = _extractHandle(url, platform);
+    orbitalConfirm(tile.querySelector('.ptile-name').textContent.toUpperCase() + ' LINKED', 'sync', { handle, platform });
   } else {
     tile.classList.remove('connected');
     tile.classList.remove('expanded');
     tile.querySelector('.ptile-status').textContent = '+ Connect';
   }
   _idlabUpdatePlatformPreview();
+}
+
+function _extractHandle(url, platform) {
+  try {
+    // Strip protocol, trailing slashes
+    let path = url.replace(/^https?:\/\//, '').replace(/\/+$/, '');
+    // Remove domain
+    const slashIdx = path.indexOf('/');
+    if (slashIdx > -1) path = path.substring(slashIdx + 1);
+    // Remove query params
+    path = path.split('?')[0].split('#')[0];
+    // Get last meaningful segment
+    const segments = path.split('/').filter(Boolean);
+    const last = segments[segments.length - 1] || '';
+    if (last && last.length > 1) return '@' + last.replace(/^@/, '');
+  } catch(e) {}
+  return '@' + platform;
 }
 
 function _idlabCollectLinks(gridId) {
@@ -5670,7 +5694,7 @@ const _orbStyles = {
 };
 let _orbBusy = false;
 
-function orbitalConfirm(text, type='sync') {
+function orbitalConfirm(text, type='sync', residue=null) {
   if (_orbBusy) return;
   _orbBusy = true;
   const s = _orbStyles[type] || _orbStyles.sync;
@@ -5761,10 +5785,452 @@ function orbitalConfirm(text, type='sync') {
     overlay.classList.remove('active');
     hline.style.height = '2px';
     _orbBusy = false;
+    // Phase 7: IDENTITY RESIDUE — if residue data provided
+    if (residue && residue.handle) {
+      setTimeout(() => orbitalResidue(residue.handle, residue.platform), 100);
+    }
   }, 2900);
 }
 
-// ════ CURRICULUM ENGINE — SPACE STATION LIBRARY ════
+// ── IDENTITY RESIDUE ENGINE ──
+// Usage: orbitalResidue('@handle', 'spotify')
+// Fires after orbital confirm fades — personalized identity moment
+
+const _residueMap = {
+  spotify:     { effect:'electricArc',   color:[30,215,96] },
+  tidal:       { effect:'electricArc',   color:[0,229,255] },
+  audiomack:   { effect:'electricArc',   color:[255,130,20] },
+  instagram:   { effect:'neonBurnIn',    color:[225,48,108] },
+  tiktok:      { effect:'neonBurnIn',    color:[0,242,234] },
+  apple_music: { effect:'holoProjection',color:[252,60,68] },
+  facebook:    { effect:'holoProjection',color:[66,103,178] },
+  soundcloud:  { effect:'smokeBrand',    color:[255,85,0] },
+  bandcamp:    { effect:'smokeBrand',    color:[29,185,184] },
+  youtube:     { effect:'laserEtch',     color:[255,0,0] },
+  twitter:     { effect:'laserEtch',     color:[230,236,240] },
+  _default:    { effect:'electricArc',   color:[0,230,118] }
+};
+
+let _resAnimId = null;
+
+function orbitalResidue(handle, platform) {
+  const cfg = _residueMap[platform] || _residueMap._default;
+  const wrap = document.getElementById('orbResidue');
+  const canvas = document.getElementById('orbResCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  wrap.classList.add('active');
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const r = cfg.color;
+
+  if (_resAnimId) cancelAnimationFrame(_resAnimId);
+
+  const effects = { electricArc: _resElectricArc, neonBurnIn: _resNeonBurnIn, smokeBrand: _resSmokeBrand, laserEtch: _resLaserEtch, holoProjection: _resHoloProjection };
+  const fn = effects[cfg.effect] || effects.electricArc;
+  fn(ctx, canvas, cx, cy, r, handle, wrap);
+}
+
+// ── EFFECT 1: ELECTRIC ARC ──
+function _resElectricArc(ctx, canvas, cx, cy, rgb, handle, wrap) {
+  const particles = [];
+  const startTime = performance.now();
+  const duration = 3000;
+  const fontSize = Math.min(36, canvas.width * 0.04);
+  ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+  const textW = ctx.measureText(handle).width;
+  const chars = handle.split('');
+  // Pre-calc char positions
+  let xOff = cx - textW / 2;
+  const charPos = chars.map(ch => { const w = ctx.measureText(ch).width; const x = xOff; xOff += w; return { ch, x, w }; });
+
+  function frame(now) {
+    const t = (now - startTime) / duration;
+    if (t > 1) { ctx.clearRect(0, 0, canvas.width, canvas.height); wrap.classList.remove('active'); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Text appears letter by letter in first 30%
+    const revealPct = Math.min(1, t / 0.3);
+    const revealCount = Math.floor(revealPct * chars.length);
+    // After 70%, chars burn out left to right
+    const burnPct = t > 0.7 ? (t - 0.7) / 0.3 : 0;
+    const burnCount = Math.floor(burnPct * chars.length);
+
+    for (let i = 0; i < charPos.length; i++) {
+      const cp = charPos[i];
+      if (i >= revealCount) continue;
+      let alpha = 1;
+      if (i < burnCount) {
+        const burnT = (burnCount - i) / chars.length;
+        alpha = Math.max(0, 1 - burnT * 3);
+        // Spark particles on burn-out
+        if (alpha < 0.5 && Math.random() < 0.3) {
+          particles.push({ x: cp.x + cp.w / 2, y: cy, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4 - 2, life: 1 });
+        }
+      }
+      // Glow
+      ctx.save();
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * 0.8})`;
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+      ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+      ctx.fillText(cp.ch, cp.x, cy + fontSize * 0.35);
+      ctx.restore();
+    }
+
+    // Lightning arcs between adjacent revealed chars
+    if (revealCount > 1 && t < 0.75) {
+      ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${0.4 + Math.random() * 0.3})`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < revealCount - 1; i++) {
+        if (Math.random() > 0.4) continue;
+        const a = charPos[i], b = charPos[i + 1];
+        ctx.beginPath();
+        ctx.moveTo(a.x + a.w, cy);
+        const midX = (a.x + a.w + b.x) / 2 + (Math.random() - 0.5) * 10;
+        const midY = cy + (Math.random() - 0.5) * 20;
+        ctx.quadraticCurveTo(midX, midY, b.x, cy);
+        ctx.stroke();
+      }
+    }
+
+    // Render particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.life -= 0.03;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${p.life})`;
+      ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+    }
+    _resAnimId = requestAnimationFrame(frame);
+  }
+  _resAnimId = requestAnimationFrame(frame);
+}
+
+// ── EFFECT 2: NEON BURN-IN ──
+function _resNeonBurnIn(ctx, canvas, cx, cy, rgb, handle, wrap) {
+  const startTime = performance.now();
+  const duration = 3200;
+  const fontSize = Math.min(36, canvas.width * 0.04);
+  // Secondary color for gradient effect (shift hue)
+  const rgb2 = [Math.min(255, rgb[0] + 80), Math.max(0, rgb[1] - 40), Math.min(255, rgb[2] + 60)];
+
+  function frame(now) {
+    const t = (now - startTime) / duration;
+    if (t > 1) { ctx.clearRect(0, 0, canvas.width, canvas.height); wrap.classList.remove('active'); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Phase: flicker on (0-0.2), stable glow (0.2-0.6), crack + gas escape (0.6-1.0)
+    let alpha, flickerOff = false;
+    if (t < 0.2) {
+      // Neon tube flickering on
+      alpha = Math.random() > 0.3 ? (t / 0.2) : 0;
+      flickerOff = alpha === 0;
+    } else if (t < 0.6) {
+      // Stable with occasional micro-flicker
+      alpha = Math.random() > 0.03 ? 1 : 0.3;
+    } else {
+      // Fading — glass cracking, gas escaping
+      alpha = Math.max(0, 1 - ((t - 0.6) / 0.4) * 1.2);
+      if (Math.random() > 0.7) alpha *= 0.5; // death flickers
+    }
+
+    if (!flickerOff) {
+      ctx.save();
+      // Outer glow (tube glass)
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * 0.5})`;
+      ctx.shadowBlur = 30;
+      ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+      ctx.textAlign = 'center';
+      // Gradient fill
+      const grad = ctx.createLinearGradient(cx - 100, cy, cx + 100, cy);
+      grad.addColorStop(0, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`);
+      grad.addColorStop(0.5, `rgba(${rgb2[0]},${rgb2[1]},${rgb2[2]},${alpha})`);
+      grad.addColorStop(1, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`);
+      ctx.fillStyle = grad;
+      ctx.fillText(handle, cx, cy + fontSize * 0.35);
+      // Inner bright core
+      ctx.shadowBlur = 5;
+      ctx.globalAlpha = alpha * 0.4;
+      ctx.fillStyle = `rgba(255,255,255,${alpha * 0.6})`;
+      ctx.fillText(handle, cx, cy + fontSize * 0.35);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+
+    // Gas mist particles rising (after 0.6)
+    if (t > 0.6) {
+      const mist = Math.floor((t - 0.6) * 80);
+      for (let i = 0; i < mist; i++) {
+        const mx = cx + (Math.random() - 0.5) * 200;
+        const my = cy - (t - 0.6) * 200 * Math.random() - Math.random() * 40;
+        const ma = Math.max(0, 0.15 - (t - 0.6) * 0.3) * Math.random();
+        ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${ma})`;
+        ctx.beginPath();
+        ctx.arc(mx, my, 2 + Math.random() * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    _resAnimId = requestAnimationFrame(frame);
+  }
+  _resAnimId = requestAnimationFrame(frame);
+}
+
+// ── EFFECT 3: SMOKE BRAND ──
+function _resSmokeBrand(ctx, canvas, cx, cy, rgb, handle, wrap) {
+  const startTime = performance.now();
+  const duration = 3500;
+  const fontSize = Math.min(36, canvas.width * 0.04);
+  const smokeParticles = [];
+
+  function frame(now) {
+    const t = (now - startTime) / duration;
+    if (t > 1) { ctx.clearRect(0, 0, canvas.width, canvas.height); wrap.classList.remove('active'); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Phase: slam down (0-0.08), white-hot (0.08-0.2), cool through colors (0.2-0.7), ember fade (0.7-1)
+    ctx.save();
+    ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+    ctx.textAlign = 'center';
+
+    let textAlpha = 1, textColor;
+    if (t < 0.08) {
+      // Slam — scale bounce
+      const slamT = t / 0.08;
+      const scale = 1 + (1 - slamT) * 0.3;
+      ctx.translate(cx, cy + fontSize * 0.35);
+      ctx.scale(scale, scale);
+      ctx.translate(-cx, -(cy + fontSize * 0.35));
+      textColor = '255,255,255';
+      // Burst of smoke on impact
+      for (let i = 0; i < 8; i++) {
+        smokeParticles.push({ x: cx + (Math.random() - 0.5) * 150, y: cy, vx: (Math.random() - 0.5) * 2, vy: -Math.random() * 3 - 1, size: 3 + Math.random() * 6, life: 1 });
+      }
+    } else if (t < 0.2) {
+      textColor = '255,255,255';
+    } else if (t < 0.4) {
+      // Cool: white → orange
+      const ct = (t - 0.2) / 0.2;
+      textColor = `${255},${Math.floor(255 - ct * 90)},${Math.floor(255 - ct * 200)}`;
+    } else if (t < 0.6) {
+      // Cool: orange → red
+      const ct = (t - 0.4) / 0.2;
+      textColor = `${255},${Math.floor(165 - ct * 100)},${Math.floor(55 - ct * 55)}`;
+    } else {
+      // Ember fade
+      const ct = (t - 0.6) / 0.4;
+      textColor = `${Math.floor(200 - ct * 150)},${Math.floor(65 - ct * 65)},0`;
+      textAlpha = Math.max(0, 1 - ct * 1.5);
+    }
+
+    // Continuous smoke wisps
+    if (t > 0.08 && t < 0.85 && Math.random() < 0.4) {
+      smokeParticles.push({ x: cx + (Math.random() - 0.5) * 120, y: cy - 5, vx: (Math.random() - 0.5) * 0.5, vy: -Math.random() * 1.5 - 0.5, size: 2 + Math.random() * 4, life: 1 });
+    }
+
+    // Draw text
+    ctx.shadowColor = `rgba(${textColor},${textAlpha * 0.7})`;
+    ctx.shadowBlur = t < 0.2 ? 25 : 10;
+    ctx.fillStyle = `rgba(${textColor},${textAlpha})`;
+    ctx.fillText(handle, cx, cy + fontSize * 0.35);
+    ctx.restore();
+
+    // Render smoke
+    for (let i = smokeParticles.length - 1; i >= 0; i--) {
+      const p = smokeParticles[i];
+      p.x += p.vx; p.y += p.vy; p.vy -= 0.01; p.life -= 0.012; p.size += 0.05;
+      if (p.life <= 0) { smokeParticles.splice(i, 1); continue; }
+      ctx.fillStyle = `rgba(180,180,180,${p.life * 0.12})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    _resAnimId = requestAnimationFrame(frame);
+  }
+  _resAnimId = requestAnimationFrame(frame);
+}
+
+// ── EFFECT 4: LASER ETCH ──
+function _resLaserEtch(ctx, canvas, cx, cy, rgb, handle, wrap) {
+  const startTime = performance.now();
+  const duration = 3200;
+  const fontSize = Math.min(36, canvas.width * 0.04);
+  ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+  const textW = ctx.measureText(handle).width;
+  const startX = cx - textW / 2;
+
+  function frame(now) {
+    const t = (now - startTime) / duration;
+    if (t > 1) { ctx.clearRect(0, 0, canvas.width, canvas.height); wrap.classList.remove('active'); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+    ctx.textAlign = 'left';
+
+    // Phase 1 (0-0.35): laser writes left to right
+    // Phase 2 (0.35-0.65): verification scan (cyan pulse left-to-right)
+    // Phase 3 (0.65-0.85): hold
+    // Phase 4 (0.85-1.0): flash and fade
+
+    if (t < 0.35) {
+      // Writing phase — clip text to reveal
+      const revealX = startX + (t / 0.35) * textW;
+      ctx.beginPath();
+      ctx.rect(startX - 5, cy - fontSize, revealX - startX + 5, fontSize * 2);
+      ctx.clip();
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.6)`;
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.9)`;
+      ctx.fillText(handle, startX, cy + fontSize * 0.35);
+      ctx.restore();
+      // Laser head
+      ctx.save();
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},1)`;
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},1)`;
+      ctx.shadowBlur = 20;
+      ctx.fillRect(revealX - 1, cy - fontSize * 0.5, 2, fontSize);
+      // Scatter sparks at etch point
+      for (let i = 0; i < 3; i++) {
+        const sx = revealX + (Math.random() - 0.5) * 6;
+        const sy = cy + (Math.random() - 0.5) * fontSize;
+        ctx.fillRect(sx, sy, 1.5, 1.5);
+      }
+      ctx.restore();
+    } else if (t < 0.65) {
+      // Full text visible + verification scan
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.5)`;
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.85)`;
+      ctx.textAlign = 'left';
+      ctx.fillText(handle, startX, cy + fontSize * 0.35);
+      // Cyan verification pulse
+      const scanX = startX + ((t - 0.35) / 0.3) * textW;
+      ctx.fillStyle = `rgba(0,229,255,0.12)`;
+      ctx.fillRect(scanX - 15, cy - fontSize * 0.6, 30, fontSize * 1.4);
+      ctx.restore();
+    } else if (t < 0.85) {
+      // Hold — gentle glow
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.4)`;
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.8)`;
+      ctx.textAlign = 'left';
+      ctx.fillText(handle, startX, cy + fontSize * 0.35);
+      ctx.restore();
+    } else {
+      // Flash and fade
+      const fadeT = (t - 0.85) / 0.15;
+      const flash = fadeT < 0.2 ? 0.3 : 0;
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${(1 - fadeT) * 0.5})`;
+      ctx.shadowBlur = 15 + flash * 30;
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${Math.max(0, 1 - fadeT * 1.5)})`;
+      ctx.textAlign = 'left';
+      ctx.fillText(handle, startX, cy + fontSize * 0.35);
+      if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash})`; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+      ctx.restore();
+    }
+    _resAnimId = requestAnimationFrame(frame);
+  }
+  _resAnimId = requestAnimationFrame(frame);
+}
+
+// ── EFFECT 5: HOLO PROJECTION ──
+function _resHoloProjection(ctx, canvas, cx, cy, rgb, handle, wrap) {
+  const startTime = performance.now();
+  const duration = 3400;
+  const fontSize = Math.min(36, canvas.width * 0.04);
+
+  function frame(now) {
+    const t = (now - startTime) / duration;
+    if (t > 1) { ctx.clearRect(0, 0, canvas.width, canvas.height); wrap.classList.remove('active'); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.font = `800 ${fontSize}px 'Orbitron', monospace`;
+    ctx.textAlign = 'center';
+
+    // Phase: wobbly appear (0-0.25), stabilize (0.25-0.4), hold with float (0.4-0.75), shrink to point (0.75-1)
+    let alpha, yOffset = 0, rgbSplit = 0, scanLineAlpha = 0;
+
+    if (t < 0.25) {
+      // Wobbly hologram appearing
+      alpha = t / 0.25;
+      rgbSplit = (1 - t / 0.25) * 4;
+      scanLineAlpha = 0.15;
+      yOffset = Math.sin(now * 0.02) * 3;
+    } else if (t < 0.4) {
+      // Stabilizing
+      const st = (t - 0.25) / 0.15;
+      alpha = 1;
+      rgbSplit = (1 - st) * 2;
+      scanLineAlpha = (1 - st) * 0.1;
+      yOffset = Math.sin(now * 0.015) * (1 - st) * 2;
+    } else if (t < 0.75) {
+      // Stable hold with gentle bob
+      alpha = 1;
+      rgbSplit = 0;
+      scanLineAlpha = 0;
+      yOffset = Math.sin(now * 0.003) * 2;
+    } else {
+      // Shrink to point of light
+      const st = (t - 0.75) / 0.25;
+      alpha = 1 - st;
+      rgbSplit = st * 3;
+      scanLineAlpha = st * 0.2;
+    }
+
+    const drawY = cy + fontSize * 0.35 + yOffset;
+
+    // RGB split channels
+    if (rgbSplit > 0.5) {
+      ctx.globalAlpha = alpha * 0.3;
+      ctx.fillStyle = `rgba(255,0,0,${alpha * 0.5})`;
+      ctx.fillText(handle, cx - rgbSplit, drawY);
+      ctx.fillStyle = `rgba(0,0,255,${alpha * 0.5})`;
+      ctx.fillText(handle, cx + rgbSplit, drawY);
+      ctx.globalAlpha = 1;
+    }
+
+    // Main text
+    ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * 0.5})`;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * 0.85})`;
+    ctx.fillText(handle, cx, drawY);
+    // White core
+    ctx.globalAlpha = alpha * 0.3;
+    ctx.fillStyle = `rgba(255,255,255,${alpha * 0.4})`;
+    ctx.fillText(handle, cx, drawY);
+    ctx.globalAlpha = 1;
+
+    // Horizontal scan lines
+    if (scanLineAlpha > 0) {
+      for (let y = cy - fontSize; y < cy + fontSize; y += 3) {
+        ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${scanLineAlpha * Math.random()})`;
+        ctx.fillRect(cx - 120, y, 240, 1);
+      }
+    }
+
+    // Point of light on shrink
+    if (t > 0.85) {
+      const pt = (t - 0.85) / 0.15;
+      const pointAlpha = (1 - pt) * 0.8;
+      ctx.fillStyle = `rgba(255,255,255,${pointAlpha})`;
+      ctx.shadowColor = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${pointAlpha})`;
+      ctx.shadowBlur = 20;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 3 * (1 - pt), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+    _resAnimId = requestAnimationFrame(frame);
+  }
+  _resAnimId = requestAnimationFrame(frame);
+}
+
+// ── CURRICULUM ENGINE — SPACE STATION LIBRARY ════
 
 // ── COOL FACTS DATABASE (Splash + Newsletter Excerpts) ──
 const CURR_FACTS = [
@@ -7474,5 +7940,6 @@ if (envCanvas) { envCanvas.style.opacity = '1'; envLoop(); }
 
 </script>
 <div class="orb-confirm" id="orbConfirm"><div class="orb-confirm-inner"><div class="orb-confirm-glow" id="orbGlow"></div><div class="orb-confirm-hline" id="orbHline"></div><div class="orb-confirm-text" id="orbText"><div class="orb-confirm-scanline"></div></div></div></div>
+<div id="orbResidue"><canvas id="orbResCanvas"></canvas></div>
 </body>
 </html>
