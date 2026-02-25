@@ -1924,6 +1924,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
   .merch-slot-preview{height:40px}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <canvas id="starfield"></canvas>
@@ -1953,7 +1954,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <button class="login-btn" id="loginBtn" onclick="initDocking()">[ Initiate Docking ]</button>
         <div id="loginError" style="text-align:center;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1px;color:#ff4444;margin-top:0.6rem;opacity:0;transition:opacity 0.3s ease;"></div>
         <div class="login-divider"><span>————</span></div>
-        <div class="login-signup">No credentials? <a href="#" onclick="event.preventDefault()">Request Access</a></div>
+        <div class="login-signup">No credentials? <a href="#" onclick="event.preventDefault();document.getElementById('loginError').textContent='SYS: REQUEST ACCESS AT ORBITARTS.APP';document.getElementById('loginError').style.opacity='1';document.getElementById('loginError').style.color='#88aaff';">Request Access</a></div>
       </div>
       <div class="terminal-footer">
         <span>OrbitHQ Flight Ops</span>
@@ -3766,23 +3767,44 @@ updateTerminalClock();
 
 // ════ DEV BYPASS ════
 
-// ════ DOCKING ════
-const _vk=['015eb6e0f8160c0dc774e0d11fde97f98fdbf5a9a692f1dcc9876a4a5a535d0c','e95dc48c0ac0e4c3ced080a623c4dd812647630019cf23c35a8ad498982d9846'];
-async function _h(s){const e=new TextEncoder().encode(s);const b=await crypto.subtle.digest('SHA-256',e);return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+// ════ SUPABASE AUTH ════
+const SUPABASE_URL='https://xsiajjevilfriankuimt.supabase.co';
+const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWFqamV2aWxmcmlhbmt1aW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NzgxNzAsImV4cCI6MjA4NzU1NDE3MH0.OMDUz1L8bHAUOqz77YmHSUcdo_vK6Wpr14lrQa88W9E';
+const _sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
+let _currentUser=null;
+
 async function initDocking(){
   const uid=document.getElementById('loginEmail').value.trim().toLowerCase();
   const key=document.getElementById('loginPassword').value;
   const err=document.getElementById('loginError');
+  err.style.color='#ff4444';
   if(!uid||!key){err.textContent='SYS: ALL FIELDS REQUIRED';err.style.opacity='1';return;}
-  const hash=await _h(uid+':'+key);
-  if(!_vk.includes(hash)){
-    err.textContent='SYS: ACCESS DENIED — INVALID CREDENTIALS';err.style.opacity='1';
+  const email=uid.replace(/[^a-z0-9_.-]/g,'')+'@orbithq.app';
+  const btn=document.getElementById('loginBtn');
+  btn.disabled=true;
+  btn.textContent='[ Authenticating... ]';
+  try{
+    const result=await _sb.auth.signInWithPassword({email,password:key});
+    if(result.error) throw result.error;
+    _currentUser=result.data.user;
+    err.style.opacity='0';
+    _runDockingAnimation(btn);
+  } catch(e){
+    btn.textContent='[ Initiate Docking ]';btn.disabled=false;
+    let msg='SYS: ACCESS DENIED';
+    if(e.message){
+      if(e.message.includes('Invalid login'))msg='SYS: ACCESS DENIED — INVALID CREDENTIALS';
+      else if(e.message.includes('rate limit'))msg='SYS: TOO MANY ATTEMPTS — STAND BY';
+      else msg='SYS: '+e.message.toUpperCase().slice(0,60);
+    }
+    err.textContent=msg;err.style.opacity='1';
     const box=document.querySelector('.login-box');
     box.style.animation='none';box.offsetHeight;box.style.animation='shake 0.4s ease';
-    setTimeout(()=>{box.style.animation='';},500);return;
+    setTimeout(()=>{box.style.animation='';},500);
   }
-  err.style.opacity='0';
-  const btn=document.getElementById('loginBtn');
+}
+
+function _runDockingAnimation(btn){
   btn.classList.add('docking');btn.textContent='[ Launching... ]';
   const box=document.querySelector('.login-box');
   const rect=box.getBoundingClientRect();
@@ -3796,7 +3818,7 @@ async function initDocking(){
     document.getElementById('dockTransition').classList.add('active');
     initStarfield('starfield3');
     box.style.transition='none';box.style.opacity='';
-    btn.classList.remove('docking');btn.textContent='[ Initiate Docking ]';
+    btn.classList.remove('docking');btn.textContent='[ Initiate Docking ]';btn.disabled=false;
     isDocking=false;
     document.getElementById('loginEmail').value='';document.getElementById('loginPassword').value='';
     setTimeout(()=>{
@@ -3805,17 +3827,31 @@ async function initDocking(){
     },3500);
   },3200);
 }
-function logout(){
-  // Hide app & carousel
+
+async function logout(){
+  await _sb.auth.signOut();
+  _currentUser=null;
   const app=document.getElementById('app');app.classList.remove('active');app.classList.add('hidden');
   lobbyActive=false;document.getElementById('carouselLobby').classList.remove('active');
   document.getElementById('navArrowL').classList.remove('show');
   document.getElementById('navArrowR').classList.remove('show');
-  // Show login
   document.getElementById('loginOverlay').classList.add('active');
   loginCanvasActive=false;
   setTimeout(()=>initLoginStarfield('starfield2'),100);
 }
+
+// ════ SESSION PERSISTENCE — auto-login if session exists ════
+async function checkExistingSession(){
+  const{data:{session}}=await _sb.auth.getSession();
+  if(session&&session.user){
+    _currentUser=session.user;
+    document.getElementById('loginOverlay').classList.remove('active');
+    loginCanvasActive=false;
+    if(loginAnimFrame)cancelAnimationFrame(loginAnimFrame);
+    showCarousel();
+  }
+}
+checkExistingSession();
 
 // ════ ROOM NAVIGATION + SLIDE+FADE + WARP FLASH ════
 const roomMeta = {
