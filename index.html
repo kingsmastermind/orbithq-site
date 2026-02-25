@@ -2442,10 +2442,10 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
             <div class="room-title">Stats Explorer</div>
             <div class="room-subtitle">Deep analytics across all platforms in one view</div>
           </div>
-          <div class="room-status"><div class="status-dot yellow"></div> 1 of 11 platforms connected</div>
+          <div class="room-status"><div class="status-dot yellow" id="statsStatusDot"></div> <span id="statsStatusText">Loading platforms...</span></div>
         </div>
-        <div class="boot-section stats-connect-banner">
-          <div class="banner-text"><strong>Connect more platforms</strong> to unlock full analytics — currently showing Spotify only</div>
+        <div class="boot-section stats-connect-banner" id="statsConnectBanner">
+          <div class="banner-text" id="statsBannerText"><strong>Connect more platforms</strong> to unlock full analytics</div>
           <button class="btn-primary" onclick="switchRoom('identity',document.querySelector('[data-room=identity]'))">+ Connect Platforms</button>
         </div>
         <div class="boot-section stats-grid-top">
@@ -2675,6 +2675,12 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
           <button class="vault-filter-btn" onclick="vaultFilter('platinum',this)">🪙 Platinum+</button>
           <button class="vault-label-toggle" id="vaultLabelToggle" onclick="vaultToggleLabel()">Label View: OFF</button>
           <button onclick="vaultAddRelease()" style="margin-left:auto;background:rgba(255,210,100,0.1);border:1px solid rgba(255,210,100,0.25);color:#ffd264;padding:0.25rem 0.6rem;border-radius:6px;cursor:pointer;font-size:0.5rem;font-family:'Space Mono',monospace">+ Add Release</button>
+        </div>
+
+        <!-- Your Releases (from calendar DB) -->
+        <div class="boot-section" id="vaultYourReleases" style="display:none">
+          <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:2px;color:rgba(255,210,100,0.7);margin-bottom:0.6rem">YOUR SCHEDULED RELEASES</div>
+          <div id="vaultYourReleasesList" style="display:flex;flex-direction:column;gap:0.4rem"></div>
         </div>
 
         <!-- Plaque Hall — Main Artist -->
@@ -4236,11 +4242,15 @@ function switchRoom(roomId, navEl) {
         if (roomId === 'dashboard') setTimeout(dashInit, 200);
         if (roomId === 'settings') setTimeout(settingsInit, 200);
         if (roomId === 'launch') setTimeout(lpInit, 200);
+        if (roomId === 'stats') setTimeout(statsInit, 200);
+        if (roomId === 'vault') setTimeout(vaultDBInit, 200);
       }
       // Every-visit refreshes (not just first boot)
       if (roomId === 'content') setTimeout(csBootDB, 300);
       if (roomId === 'dashboard') setTimeout(dashInit, 300);
       if (roomId === 'settings') setTimeout(settingsInit, 300);
+      if (roomId === 'stats') setTimeout(statsInit, 300);
+      if (roomId === 'vault') setTimeout(vaultDBInit, 300);
     }
     isTransitioning = false;
   }, 120);
@@ -5109,10 +5119,27 @@ function vaultCloseDetail() {
   document.getElementById('vaultDetailPanel').classList.remove('open');
 }
 
-function vaultAddRelease() {
-  // MVP: Orbital Confirm + milestone. Full upload UI comes with Supabase Vault backend.
-  orbitalConfirm('RELEASE SECURED', 'locked');
-  _checkMilestone('vault_upload', { title: 'NEW RELEASE' });
+async function vaultAddRelease() {
+  if (!_currentUser) { orbitalConfirm('LOGIN REQUIRED','alert'); return; }
+  const title = prompt('Release title:');
+  if (!title) return;
+  const dateStr = prompt('Release date (YYYY-MM-DD):');
+  if (!dateStr) return;
+  const desc = prompt('Description (optional):') || '';
+  try {
+    const { error } = await _sb.from('calendar').insert({
+      user_id: _currentUser.id,
+      title: title,
+      description: desc || null,
+      event_type: 'release',
+      scheduled_at: dateStr + 'T00:00:00Z',
+      status: 'scheduled'
+    });
+    if (error) throw error;
+    orbitalConfirm('RELEASE SECURED', 'locked');
+    _checkMilestone('vault_upload', { title: title });
+    setTimeout(vaultDBInit, 500); // refresh the list
+  } catch(e) { console.error('[Vault] Add error:', e); orbitalConfirm('SAVE FAILED','alert'); }
 }
 
 // ═══════════════════════════════════════════════
@@ -6771,8 +6798,33 @@ const CURR_BOOKS = [
 let currState = { currentBook:null, currentCard:0, flipped:false, known:new Set(), quizBook:null, quizIdx:0, quizCorrect:0, quizAnswered:false };
 
 // Persist known cards
-function currSaveState(){ try{localStorage.setItem('arthq_curr',JSON.stringify([...currState.known]))}catch(e){} }
-function currLoadState(){ try{const d=localStorage.getItem('arthq_curr');if(d)currState.known=new Set(JSON.parse(d))}catch(e){} }
+function currSaveState(){
+  // Save known cards to Supabase curriculum_progress
+  if (!_currentUser) return;
+  // Fire and forget — write each known card as a row
+  currState.known.forEach(key => {
+    const [bookId, cardIdx] = key.split('-');
+    _sb.from('curriculum_progress').upsert({
+      user_id: _currentUser.id,
+      book_id: bookId,
+      chapter_id: 'card',
+      flashcard_index: parseInt(cardIdx),
+      completed: true,
+      completed_at: new Date().toISOString()
+    }, { onConflict: 'user_id,book_id,chapter_id' }).then(()=>{}).catch(e => console.error('[Curriculum] Save error:', e));
+  });
+}
+async function currLoadState(){
+  if (!_currentUser) { try{const d=localStorage.getItem('arthq_curr');if(d)currState.known=new Set(JSON.parse(d))}catch(e){} return; }
+  try {
+    const { data, error } = await _sb.from('curriculum_progress').select('book_id,flashcard_index').eq('user_id', _currentUser.id).eq('completed', true);
+    if (error) throw error;
+    if (data && data.length > 0) {
+      currState.known = new Set(data.map(r => r.book_id + '-' + r.flashcard_index));
+      console.log('[Curriculum] Loaded', currState.known.size, 'mastered cards from DB');
+    }
+  } catch(e) { console.error('[Curriculum] Load error:', e); try{const d=localStorage.getItem('arthq_curr');if(d)currState.known=new Set(JSON.parse(d))}catch(e2){} }
+}
 
 // VIEW SWITCHER
 function currSwitchView(view, btn){
@@ -7025,8 +7077,8 @@ document.addEventListener('touchend',e=>{
 },{passive:true});
 
 // BOOT CURRICULUM
-function bootCurriculum(){
-  currLoadState();
+async function bootCurriculum(){
+  await currLoadState();
   currRenderBookshelf();
   currRenderQuizMenu();
   currUpdateGlobalProgress();
@@ -8700,6 +8752,60 @@ function _freqStartEnv() {
   }
   if (_freqEnvAnim) cancelAnimationFrame(_freqEnvAnim);
   _freqEnvAnim = requestAnimationFrame(draw);
+}
+
+// ── STATS EXPLORER — Dynamic Platform Count ──
+async function statsInit() {
+  if (!_currentUser) return;
+  try {
+    const { data: profile } = await _sb.from('profiles').select('dsp_links,social_links').eq('id', _currentUser.id).single();
+    if (profile) {
+      const dspCount = profile.dsp_links ? Object.values(profile.dsp_links).filter(v=>v&&v.trim()).length : 0;
+      const socCount = profile.social_links ? Object.values(profile.social_links).filter(v=>v&&v.trim()).length : 0;
+      const total = dspCount + socCount;
+      document.getElementById('statsStatusText').textContent = total + ' of 11 platforms connected';
+      const dot = document.getElementById('statsStatusDot');
+      if (total >= 5) { dot.className = 'status-dot green'; }
+      else if (total >= 1) { dot.className = 'status-dot yellow'; }
+      else { dot.className = 'status-dot'; dot.style.background = 'rgba(232,234,246,0.2)'; }
+      const banner = document.getElementById('statsBannerText');
+      if (total >= 11) { banner.innerHTML = '<strong>All platforms connected!</strong> Full analytics unlocked.'; }
+      else if (total >= 5) { banner.innerHTML = '<strong>' + total + ' platforms connected</strong> — connect more for deeper analytics'; }
+      else { banner.innerHTML = '<strong>Connect more platforms</strong> to unlock full analytics — ' + total + ' of 11 connected'; }
+      roomMeta.stats.status = total + ' of 11 platforms connected';
+      roomMeta.stats.statusType = total >= 5 ? 'green' : 'yellow';
+    }
+    console.log('[Stats] Platform count updated');
+  } catch(e) { console.error('[Stats] Init error:', e); }
+}
+
+// ── VAULT — DB-Wired Releases ──
+async function vaultDBInit() {
+  if (!_currentUser) return;
+  try {
+    const { data } = await _sb.from('calendar').select('*').eq('user_id', _currentUser.id).eq('event_type', 'release').order('scheduled_at', { ascending: false });
+    const releases = data || [];
+    const panel = document.getElementById('vaultYourReleases');
+    const list = document.getElementById('vaultYourReleasesList');
+    if (releases.length === 0) { panel.style.display = 'none'; return; }
+    panel.style.display = '';
+    list.innerHTML = releases.map(r => {
+      const d = new Date(r.scheduled_at);
+      const isPast = d <= new Date();
+      const dayDiff = Math.ceil((d - new Date()) / (1000*60*60*24));
+      const timeLabel = isPast ? 'Released' : dayDiff + ' days out';
+      const statusColor = isPast ? '#00e676' : '#ffab40';
+      return `<div style="display:flex;align-items:center;gap:0.8rem;padding:0.7rem;background:rgba(255,210,100,0.04);border:1px solid rgba(255,210,100,0.12);border-radius:8px">
+        <div style="font-size:1.2rem">${isPast?'🏆':'▲'}</div>
+        <div style="flex:1"><div style="color:#e8eaf6;font-size:0.75rem;font-weight:600">${esc(r.title)}</div><div style="color:rgba(232,234,246,0.35);font-size:0.55rem;font-family:'Space Mono',monospace;margin-top:0.15rem">${d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}${r.description?' · '+esc(r.description):''}</div></div>
+        <div style="color:${statusColor};font-size:0.5rem;font-family:'Space Mono',monospace;padding:0.2rem 0.5rem;border:1px solid ${statusColor}33;border-radius:12px">${timeLabel}</div>
+      </div>`;
+    }).join('');
+    // Update vault status
+    const totalReleases = releases.length;
+    document.getElementById('vault-status-text').textContent = totalReleases + ' release' + (totalReleases!==1?'s':'') + ' tracked';
+    console.log('[Vault] Loaded', totalReleases, 'releases from DB');
+  } catch(e) { console.error('[Vault] DB init error:', e); }
 }
 
 // ── DASHBOARD — Live Supabase Data ──
