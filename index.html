@@ -2200,9 +2200,11 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
           <div class="identity-card">
             <div class="card-title">Artist Bio</div>
             <div class="card-sub">Used across your profile, EPK, and site builder</div>
-            <div class="form-row"><div class="form-label">Artist / Stage Name <span>Required</span></div><input class="form-input" type="text" placeholder="Your artist name..."/></div>
-            <div class="form-row"><div class="form-label">Short Bio <span>0 / 160</span></div><textarea class="form-input" rows="3" placeholder="One sentence — who you are and what you make..."></textarea></div>
-            <div class="form-row"><div class="form-label">Full Bio <span>0 / 800</span></div><textarea class="form-input" rows="4" placeholder="Your full artist story for press, EPK, and your site..."></textarea></div>
+            <div class="form-row"><div class="form-label">Artist / Stage Name <span>Required</span></div><input class="form-input" id="idlab-name" type="text" placeholder="Your artist name..."/></div>
+            <div class="form-row"><div class="form-label">Artist Type</div><input class="form-input" id="idlab-type" type="text" placeholder="DJ, Producer, Singer, Songwriter..."/></div>
+            <div class="form-row"><div class="form-label">Location</div><input class="form-input" id="idlab-location" type="text" placeholder="City, State or Country..."/></div>
+            <div class="form-row"><div class="form-label">Website</div><input class="form-input" id="idlab-website" type="text" placeholder="https://yoursite.com"/></div>
+            <div class="form-row"><div class="form-label">Bio <span id="idlab-bio-count">0 / 800</span></div><textarea class="form-input" id="idlab-bio" rows="4" placeholder="Your artist story for press, EPK, and your site..." oninput="document.getElementById('idlab-bio-count').textContent=this.value.length+' / 800'"></textarea></div>
             <div class="form-row">
               <div class="form-label">Genres</div>
               <div class="genre-row">
@@ -2210,17 +2212,17 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
                 <button class="genre-add">+ Add genre</button>
               </div>
             </div>
-            <div class="action-row"><button class="btn-primary">Save Bio</button><button class="btn-secondary">Preview</button></div>
+            <div class="action-row"><button class="btn-primary" id="idlab-save-btn" onclick="idlabSaveProfile()">Save Profile</button><span id="idlab-save-status" style="font-family:'Space Mono',monospace;font-size:0.5rem;color:rgba(0,230,118,0.7);letter-spacing:1px;opacity:0"></span></div>
           </div>
           <div class="identity-card">
             <div class="card-title">Profile Preview</div>
             <div class="card-sub">How your profile appears to others</div>
             <div class="profile-preview">
-              <div class="preview-avatar">A</div>
-              <div class="preview-name">Artist Name</div>
-              <div class="preview-handle">@yourhandle</div>
-              <div class="preview-bio">Your short bio will appear here once you fill in the form. Keep it punchy — one great sentence.</div>
-              <div class="preview-genres"><span class="preview-genre">Hip-Hop</span><span class="preview-genre">R&B</span></div>
+              <div class="preview-avatar" id="idlab-preview-avatar">A</div>
+              <div class="preview-name" id="idlab-preview-name">Artist Name</div>
+              <div class="preview-handle" id="idlab-preview-handle">@yourhandle</div>
+              <div class="preview-bio" id="idlab-preview-bio">Your bio will appear here once you fill in the form. Keep it punchy.</div>
+              <div class="preview-genres" id="idlab-preview-genres"><span class="preview-genre">Hip-Hop</span><span class="preview-genre">R&B</span></div>
               <div class="preview-links"><span class="preview-link-icon">🎵</span><span class="preview-link-icon">📸</span><span class="preview-link-icon">▶️</span><span class="preview-link-icon">𝕏</span></div>
               <div class="preview-label">orbitarts.app/your-name</div>
             </div>
@@ -3910,6 +3912,7 @@ function switchRoom(roomId, navEl) {
         if (roomId === 'vault') setTimeout(vaultInit, 200);
         if (roomId === 'studio') setTimeout(studioInit, 200);
         if (roomId === 'pricing') setTimeout(pricingInit, 200);
+        if (roomId === 'identity') setTimeout(idlabLoadProfile, 200);
       }
     }
     isTransitioning = false;
@@ -5466,6 +5469,91 @@ function rosterOnEnter() {
 
 // ════ GENRE TAGS ════
 document.addEventListener('click',e=>{if(e.target.classList.contains('genre-tag'))e.target.classList.toggle('active');});
+
+// ── IDENTITY LAB — SUPABASE PROFILE CRUD ──
+let _idlabLoaded = false;
+
+async function idlabLoadProfile() {
+  if (!_currentUser || _idlabLoaded) return;
+  try {
+    const { data, error } = await _sb
+      .from('profiles')
+      .select('*')
+      .eq('id', _currentUser.id)
+      .single();
+    if (error) throw error;
+    if (!data) return;
+    // Populate form fields
+    const el = id => document.getElementById(id);
+    if (data.display_name) el('idlab-name').value = data.display_name;
+    if (data.artist_type) el('idlab-type').value = data.artist_type;
+    if (data.location) el('idlab-location').value = data.location;
+    if (data.website_url) el('idlab-website').value = data.website_url;
+    if (data.bio) { el('idlab-bio').value = data.bio; el('idlab-bio-count').textContent = data.bio.length + ' / 800'; }
+    // Populate genres
+    if (data.genre) {
+      const genres = data.genre.split(',').map(g => g.trim().toLowerCase());
+      document.querySelectorAll('.genre-tag').forEach(tag => {
+        tag.classList.toggle('active', genres.includes(tag.textContent.trim().toLowerCase()));
+      });
+    }
+    // Update preview
+    idlabUpdatePreview(data);
+    _idlabLoaded = true;
+  } catch (e) { console.error('Identity Lab load error:', e); }
+}
+
+async function idlabSaveProfile() {
+  if (!_currentUser) return;
+  const btn = document.getElementById('idlab-save-btn');
+  const status = document.getElementById('idlab-save-status');
+  btn.disabled = true; btn.textContent = '[ Saving... ]';
+  // Collect genres
+  const genres = [];
+  document.querySelectorAll('.genre-tag.active').forEach(t => genres.push(t.textContent.trim()));
+  // Build update object
+  const updates = {
+    id: _currentUser.id,
+    display_name: document.getElementById('idlab-name').value.trim(),
+    artist_type: document.getElementById('idlab-type').value.trim(),
+    location: document.getElementById('idlab-location').value.trim(),
+    website_url: document.getElementById('idlab-website').value.trim(),
+    bio: document.getElementById('idlab-bio').value.trim(),
+    genre: genres.join(', ')
+  };
+  try {
+    const { error } = await _sb
+      .from('profiles')
+      .update(updates)
+      .eq('id', _currentUser.id);
+    if (error) throw error;
+    // Success feedback
+    btn.textContent = '[ Saved ✓ ]';
+    status.textContent = 'PROFILE SYNCED'; status.style.opacity = '1';
+    setTimeout(() => { btn.textContent = 'Save Profile'; btn.disabled = false; status.style.opacity = '0'; }, 2000);
+    // Update preview live
+    idlabUpdatePreview(updates);
+  } catch (e) {
+    console.error('Save error:', e);
+    btn.textContent = 'Save Profile'; btn.disabled = false;
+    status.textContent = 'SYS: SAVE FAILED'; status.style.color = '#ff4444'; status.style.opacity = '1';
+    setTimeout(() => { status.style.opacity = '0'; status.style.color = 'rgba(0,230,118,0.7)'; }, 3000);
+  }
+}
+
+function idlabUpdatePreview(data) {
+  const el = id => document.getElementById(id);
+  if (data.display_name) {
+    el('idlab-preview-name').textContent = data.display_name;
+    el('idlab-preview-avatar').textContent = data.display_name.charAt(0).toUpperCase();
+    el('idlab-preview-handle').textContent = '@' + (data.display_name.toLowerCase().replace(/\s+/g,''));
+  }
+  if (data.bio) el('idlab-preview-bio').textContent = data.bio.length > 160 ? data.bio.slice(0, 157) + '...' : data.bio;
+  if (data.genre) {
+    const genres = data.genre.split(',').map(g => g.trim()).filter(Boolean);
+    el('idlab-preview-genres').innerHTML = genres.map(g => '<span class="preview-genre">' + g + '</span>').join('');
+  }
+}
 
 // ════ CURRICULUM ENGINE — SPACE STATION LIBRARY ════
 
