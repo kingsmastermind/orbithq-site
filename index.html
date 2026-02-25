@@ -2044,7 +2044,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <div class="login-logo">OrbitHQ</div>
         <div class="login-subtitle">crew access terminal v2.6</div>
         <div class="terminal-readout">
-          <span>SYS:</span> STATION ONLINE | <span>ORBIT:</span> NOMINAL | <span>OS:</span> 10eOS v8.1<br>
+          <span>SYS:</span> STATION ONLINE | <span>ORBIT:</span> NOMINAL | <span>OS:</span> 10eOS v8.2<br>
           <span>DOCK:</span> PORT-7 AVAILABLE | <span>CREW:</span> AWAITING AUTH
         </div>
         <div class="login-field"><label>Operator ID</label><input type="text" placeholder="enter callsign..." id="loginEmail" autocomplete="off" spellcheck="false"></div>
@@ -2076,7 +2076,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
   <div class="cl-vignette"></div>
   <div class="cl-header">
     <div class="cl-brand"><div class="cl-logo">OrbitHQ</div><div class="cl-divider"></div><div class="cl-sub">Select Destination</div></div>
-    <div class="cl-user"><div class="cl-name">10eo</div><div class="cl-avatar">10</div></div>
+    <div class="cl-user"><div class="cl-name" id="lobbyUserName">10eo</div><div class="cl-avatar" id="lobbyAvatar">10</div></div>
   </div>
   <div class="info-panel" id="infoPanel">
     <div class="ip-badge" id="ipBadge">Online</div>
@@ -2093,7 +2093,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
     <div class="cl-bottom-right">
       <div class="cb-stat"><div class="cb-val">142.8K</div><div class="cb-lbl">Streams</div></div>
       <div class="cb-stat"><div class="cb-val">$1,247</div><div class="cb-lbl">Revenue</div></div>
-      <div class="cb-stat"><div class="cb-val">8</div><div class="cb-lbl">Rooms</div></div>
+      <div class="cb-stat"><div class="cb-val">14</div><div class="cb-lbl">Rooms</div></div>
     </div>
   </div>
 </div>
@@ -2119,14 +2119,11 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
       <div class="nav-section-label">Grow</div>
       <div class="nav-item" data-room="stats" onclick="switchRoom('stats',this)"><span class="ni">📡</span> Stats Explorer</div>
       <div class="nav-item" data-room="royalty" onclick="switchRoom('royalty',this)"><span class="ni">💰</span> Royalty Command <span class="badge" style="background:rgba(255,64,129,0.1);border-color:rgba(255,64,129,0.25);color:#ff4081">New</span></div>
-      <div class="nav-item" data-room="content" onclick="switchRoom('content',this)"><span class="ni">📅</span> Content Studio</div>
       <div class="nav-item" data-room="frequency" onclick="switchRoom('frequency',this)"><span class="ni">🎧</span> The Frequency <span class="badge" style="background:rgba(156,39,176,0.1);border-color:rgba(156,39,176,0.25);color:#ce93d8">Live</span></div>
       <div class="nav-item" data-room="crm" onclick="switchRoom('crm',this)"><span class="ni">📡</span> The Projection <span class="badge" style="background:rgba(100,140,255,0.1);border-color:rgba(100,140,255,0.25);color:rgba(130,170,255,0.9)">CRM</span></div>
       <div class="nav-section-label">Create</div>
-
+      <div class="nav-item" data-room="content" onclick="switchRoom('content',this)"><span class="ni">📅</span> Content Studio</div>
       <div class="nav-item" data-room="launch" onclick="switchRoom('launch',this)"><span class="ni">▲</span> Launch Pad</div>
-
-      <div class="nav-section-label">Build</div>
 
       <div class="nav-section-label">Learn</div>
       <div class="nav-item" data-room="curriculum" onclick="switchRoom('curriculum',this)"><span class="ni">🎓</span> The Curriculum</div>
@@ -2140,8 +2137,8 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <div class="ascent-label">The Ascent · <span class="level-name" id="ascentLevelName">Stardust</span></div>
       </div>
       <div class="user-card">
-        <div class="user-avatar">A</div>
-        <div><div class="user-name">Artist</div><div class="user-tier">Pro Tier</div></div>
+        <div class="user-avatar" id="sidebarAvatar">A</div>
+        <div><div class="user-name" id="sidebarUserName">Artist</div><div class="user-tier" id="sidebarUserTier">Stardust</div></div>
       </div>
       <button class="undock-btn" onclick="logout()">[ Undock ]</button>
       <button class="undock-btn" id="demoModeBtn" onclick="toggleRosterMode()" style="margin-top:0.4rem;border-color:rgba(255,64,129,0.25);color:rgba(255,64,129,0.5)">[ Roster Mode ]</button>
@@ -2187,7 +2184,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
             <div class="room-title">Command Center</div>
             <div class="room-subtitle">Your mission briefing for today</div>
           </div>
-          <div class="room-status"><div class="status-dot green"></div> All Systems Operational <span style="margin-left:0.5rem;font-size:0.4rem;color:rgba(0,229,255,0.35);font-family:'Space Mono',monospace;border:1px solid rgba(0,229,255,0.12);padding:0.1rem 0.35rem;border-radius:4px;letter-spacing:1px">10eOS v8.1</span></div>
+          <div class="room-status"><div class="status-dot green"></div> All Systems Operational <span style="margin-left:0.5rem;font-size:0.4rem;color:rgba(0,229,255,0.35);font-family:'Space Mono',monospace;border:1px solid rgba(0,229,255,0.12);padding:0.1rem 0.35rem;border-radius:4px;letter-spacing:1px">10eOS v8.2</span></div>
         </div>
 
         <div class="boot-section stats-row">
@@ -3460,7 +3457,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         <div class="boot-section" style="margin-bottom:1.5rem">
           <h3 style="font-family:'Orbitron',sans-serif;font-size:0.7rem;color:rgba(232,234,246,0.5);letter-spacing:2px;margin-bottom:0.8rem">SYSTEM</h3>
           <div style="display:flex;flex-direction:column;gap:0.4rem">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Operating System</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">10eOS v8.1</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Operating System</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">10eOS v8.2</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Platform</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">OrbitHQ</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Publisher</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">Orbit The Arts LLC</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);border-radius:8px"><div style="color:rgba(232,234,246,0.4);font-size:0.55rem;font-family:'Space Mono',monospace">Rooms Online</div><div style="color:rgba(0,229,255,0.6);font-size:0.55rem;font-family:'Space Mono',monospace">14 / 14</div></div>
@@ -4133,6 +4130,7 @@ async function initDocking(){
     if(result.error) throw result.error;
     _currentUser=result.data.user;
     _loadUserMilestones(); // Pre-load milestones at login
+    _updateUserCards(); // Update sidebar + lobby with profile data
     err.style.opacity='0';
     _runDockingAnimation(btn);
   } catch(e){
@@ -4175,6 +4173,31 @@ function _runDockingAnimation(btn){
   },3200);
 }
 
+// ════ DYNAMIC USER CARDS — sidebar + lobby ════
+async function _updateUserCards() {
+  if (!_currentUser) return;
+  try {
+    const { data: profile } = await _sb.from('profiles').select('callsign,display_name,ascent_level').eq('id', _currentUser.id).single();
+    if (!profile) return;
+    const callsign = profile.callsign || 'artist';
+    const displayName = profile.display_name || callsign;
+    const level = profile.ascent_level || 'stardust';
+    const initial = callsign.substring(0, 2).toUpperCase();
+    // Sidebar
+    const sa = document.getElementById('sidebarAvatar');
+    const sn = document.getElementById('sidebarUserName');
+    const st = document.getElementById('sidebarUserTier');
+    if (sa) sa.textContent = initial;
+    if (sn) sn.textContent = displayName;
+    if (st) st.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+    // Lobby
+    const ln = document.getElementById('lobbyUserName');
+    const la = document.getElementById('lobbyAvatar');
+    if (ln) ln.textContent = callsign;
+    if (la) la.textContent = initial;
+  } catch(e) { console.error('[UserCards] Update error:', e); }
+}
+
 async function logout(){
   await _sb.auth.signOut();
   _currentUser=null;_idlabLoaded=false;_milestonesLoaded=false;_userMilestones.clear();
@@ -4194,6 +4217,7 @@ async function checkExistingSession(){
   if(session&&session.user){
     _currentUser=session.user;
     _loadUserMilestones(); // Pre-load milestones at session resume
+    _updateUserCards(); // Update sidebar + lobby with profile data
     document.getElementById('loginOverlay').classList.remove('active');
     loginCanvasActive=false;
     if(loginAnimFrame)cancelAnimationFrame(loginAnimFrame);
