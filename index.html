@@ -234,15 +234,25 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
 .card-title { font-family:'Orbitron',monospace; font-size:0.7rem; font-weight:600; letter-spacing:2px; color:var(--accent-cyan); margin-bottom:0.3rem; }
 .card-sub { font-size:0.75rem; color:rgba(232,234,246,0.3); margin-bottom:1.2rem; }
 .platform-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.6rem; }
-.ptile { display:flex; flex-direction:column; align-items:center; gap:0.5rem; padding:1rem 0.5rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:4px; cursor:pointer; transition:all 0.2s ease; position:relative; }
+.ptile { display:flex; flex-direction:column; align-items:center; gap:0.5rem; padding:1rem 0.5rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:4px; cursor:pointer; transition:all 0.2s ease; position:relative; overflow:hidden; }
 .ptile:hover { border-color:rgba(255,255,255,0.15); transform:translateY(-2px); }
 .ptile.connected { border-color:rgba(0,230,118,0.2); background:rgba(0,230,118,0.03); }
 .ptile.connected:hover { border-color:rgba(0,230,118,0.4); }
+.ptile.expanded { grid-column:span 2; border-color:rgba(0,229,255,0.3); background:rgba(0,229,255,0.04); }
+.ptile.expanded:hover { transform:none; }
 .ptile-icon { font-size:1.4rem; }
 .ptile-name { font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:2px; text-transform:uppercase; color:rgba(232,234,246,0.4); }
 .ptile-status { font-size:0.6rem; color:rgba(232,234,246,0.2); }
 .ptile.connected .ptile-status { color:var(--accent-green); }
-.conn-badge { position:absolute; top:0.4rem; right:0.4rem; width:8px; height:8px; border-radius:50%; background:var(--accent-green); box-shadow:0 0 6px rgba(0,230,118,0.5); }
+.ptile-input-wrap { display:none; width:100%; padding:0.4rem 0.3rem 0; gap:0.3rem; align-items:center; }
+.ptile.expanded .ptile-input-wrap { display:flex; }
+.ptile-url { flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(0,229,255,0.2); border-radius:3px; padding:0.35rem 0.5rem; color:var(--text-primary); font-family:'Space Mono',monospace; font-size:0.55rem; outline:none; transition:border-color 0.2s; }
+.ptile-url:focus { border-color:rgba(0,229,255,0.5); }
+.ptile-url::placeholder { color:rgba(232,234,246,0.15); }
+.ptile-save-btn { background:rgba(0,230,118,0.15); border:1px solid rgba(0,230,118,0.3); color:var(--accent-green); border-radius:3px; padding:0.3rem 0.6rem; cursor:pointer; font-size:0.65rem; transition:all 0.2s; }
+.ptile-save-btn:hover { background:rgba(0,230,118,0.25); }
+.conn-badge { position:absolute; top:0.4rem; right:0.4rem; width:8px; height:8px; border-radius:50%; background:var(--accent-green); box-shadow:0 0 6px rgba(0,230,118,0.5); display:none; }
+.ptile.connected .conn-badge { display:block; }
 .form-row { margin-bottom:1rem; }
 .form-label { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:rgba(232,234,246,0.3); display:flex; justify-content:space-between; margin-bottom:0.4rem; }
 .form-label span { color:rgba(232,234,246,0.15); }
@@ -2189,21 +2199,26 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
         </div>
         <div class="boot-section identity-grid">
           <div class="identity-card full">
-            <div class="card-title">Platform Links</div>
-            <div class="card-sub">Connect your accounts — data flows automatically to Stats Explorer once linked</div>
-            <div class="platform-grid">
-              <div class="ptile connected"><div class="conn-badge"></div><div class="ptile-icon">🎵</div><div class="ptile-name">Spotify</div><div class="ptile-status">Connected</div></div>
-              <div class="ptile"><div class="ptile-icon">🍎</div><div class="ptile-name">Apple Music</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">▶️</div><div class="ptile-name">YouTube</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">☁️</div><div class="ptile-name">SoundCloud</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">🌊</div><div class="ptile-name">Tidal</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">🎧</div><div class="ptile-name">Audiomack</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile connected"><div class="conn-badge"></div><div class="ptile-icon">📸</div><div class="ptile-name">Instagram</div><div class="ptile-status">Connected</div></div>
-              <div class="ptile"><div class="ptile-icon">🎵</div><div class="ptile-name">TikTok</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">𝕏</div><div class="ptile-name">X / Twitter</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">👤</div><div class="ptile-name">Facebook</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">⛺</div><div class="ptile-name">Bandcamp</div><div class="ptile-status">+ Connect</div></div>
-              <div class="ptile"><div class="ptile-icon">+</div><div class="ptile-name">More</div><div class="ptile-status">Coming soon</div></div>
+            <div class="card-title">DSP Links</div>
+            <div class="card-sub">Your music platforms — paste your artist/profile URL to connect</div>
+            <div class="platform-grid" id="idlab-dsp-grid">
+              <div class="ptile" data-key="spotify" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">🎵</div><div class="ptile-name">Spotify</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="open.spotify.com/artist/..." data-key="spotify" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="apple_music" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">🍎</div><div class="ptile-name">Apple Music</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="music.apple.com/artist/..." data-key="apple_music" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="youtube" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">▶️</div><div class="ptile-name">YouTube</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="youtube.com/@yourchannel" data-key="youtube" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="soundcloud" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">☁️</div><div class="ptile-name">SoundCloud</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="soundcloud.com/yourname" data-key="soundcloud" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="tidal" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">🌊</div><div class="ptile-name">Tidal</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="tidal.com/artist/..." data-key="tidal" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="audiomack" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">🎧</div><div class="ptile-name">Audiomack</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="audiomack.com/yourname" data-key="audiomack" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="bandcamp" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">⛺</div><div class="ptile-name">Bandcamp</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="yourname.bandcamp.com" data-key="bandcamp" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+            </div>
+          </div>
+          <div class="identity-card full" style="margin-top:0.8rem">
+            <div class="card-title">Social Links</div>
+            <div class="card-sub">Your social profiles — paste your profile URL to connect</div>
+            <div class="platform-grid" id="idlab-social-grid">
+              <div class="ptile" data-key="instagram" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">📸</div><div class="ptile-name">Instagram</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="instagram.com/yourhandle" data-key="instagram" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="tiktok" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">🎵</div><div class="ptile-name">TikTok</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="tiktok.com/@yourhandle" data-key="tiktok" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="twitter" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">𝕏</div><div class="ptile-name">X / Twitter</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="x.com/yourhandle" data-key="twitter" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
+              <div class="ptile" data-key="facebook" onclick="idlabTogglePlatform(this)"><div class="conn-badge"></div><div class="ptile-icon">👤</div><div class="ptile-name">Facebook</div><div class="ptile-status">+ Connect</div><div class="ptile-input-wrap"><input class="ptile-url" type="url" placeholder="facebook.com/yourpage" data-key="facebook" onkeydown="if(event.key==='Enter')idlabCommitPlatform(this)"/><button class="ptile-save-btn" onclick="event.stopPropagation();idlabCommitPlatform(this.previousElementSibling)">✓</button></div></div>
             </div>
           </div>
         </div>
@@ -2234,7 +2249,7 @@ body { background:var(--void); color:var(--star-white); font-family:'Exo 2',sans
               <div class="preview-handle" id="idlab-preview-handle">@yourhandle</div>
               <div class="preview-bio" id="idlab-preview-bio">Your bio will appear here once you fill in the form. Keep it punchy.</div>
               <div class="preview-genres" id="idlab-preview-genres"><span class="preview-genre">Hip-Hop</span><span class="preview-genre">R&B</span></div>
-              <div class="preview-links"><span class="preview-link-icon">🎵</span><span class="preview-link-icon">📸</span><span class="preview-link-icon">▶️</span><span class="preview-link-icon">𝕏</span></div>
+              <div class="preview-links" id="idlab-preview-links"><span style="color:rgba(232,234,246,0.15);font-size:0.5rem">No platforms connected</span></div>
               <div class="preview-label">orbitarts.app/your-name</div>
             </div>
           </div>
@@ -5520,6 +5535,10 @@ async function idlabLoadProfile() {
         tag.classList.toggle('active', genres.includes(tag.textContent.trim().toLowerCase()));
       });
     }
+    // Populate platform links from JSONB
+    _idlabPopulateLinks('idlab-dsp-grid', data.dsp_links);
+    _idlabPopulateLinks('idlab-social-grid', data.social_links);
+    _idlabUpdatePlatformPreview();
     // Update preview
     idlabUpdatePreview(data);
     _idlabLoaded = true;
@@ -5541,7 +5560,9 @@ async function idlabSaveProfile() {
     location: document.getElementById('idlab-location').value.trim(),
     website_url: document.getElementById('idlab-website').value.trim(),
     bio: document.getElementById('idlab-bio').value.trim(),
-    genre: genres.join(', ')
+    genre: genres.join(', '),
+    social_links: _idlabCollectLinks('idlab-social-grid'),
+    dsp_links: _idlabCollectLinks('idlab-dsp-grid')
   };
   try {
     const { error } = await _sb
@@ -5574,6 +5595,69 @@ function idlabUpdatePreview(data) {
     const genres = data.genre.split(',').map(g => g.trim()).filter(Boolean);
     el('idlab-preview-genres').innerHTML = genres.map(g => '<span class="preview-genre">' + g + '</span>').join('');
   }
+}
+
+// ── PLATFORM TILE INTERACTION (Identity Lab) ──
+function idlabTogglePlatform(tile) {
+  // If clicking the input area, don't toggle
+  if (event && event.target.classList.contains('ptile-url')) return;
+  if (event && event.target.classList.contains('ptile-save-btn')) return;
+  const wasExpanded = tile.classList.contains('expanded');
+  // Collapse all tiles in same grid
+  tile.closest('.platform-grid').querySelectorAll('.ptile.expanded').forEach(t => t.classList.remove('expanded'));
+  if (!wasExpanded) {
+    tile.classList.add('expanded');
+    const input = tile.querySelector('.ptile-url');
+    if (input) setTimeout(() => input.focus(), 100);
+  }
+}
+
+function idlabCommitPlatform(input) {
+  const tile = input.closest('.ptile');
+  const url = input.value.trim();
+  if (url) {
+    tile.classList.add('connected');
+    tile.classList.remove('expanded');
+    tile.querySelector('.ptile-status').textContent = 'Connected';
+    orbitalConfirm(tile.querySelector('.ptile-name').textContent.toUpperCase() + ' LINKED', 'sync');
+  } else {
+    tile.classList.remove('connected');
+    tile.classList.remove('expanded');
+    tile.querySelector('.ptile-status').textContent = '+ Connect';
+  }
+  _idlabUpdatePlatformPreview();
+}
+
+function _idlabCollectLinks(gridId) {
+  const links = {};
+  document.querySelectorAll('#' + gridId + ' .ptile-url').forEach(input => {
+    const val = input.value.trim();
+    if (val) links[input.dataset.key] = val;
+  });
+  return links;
+}
+
+function _idlabPopulateLinks(gridId, data) {
+  if (!data || typeof data !== 'object') return;
+  document.querySelectorAll('#' + gridId + ' .ptile').forEach(tile => {
+    const key = tile.dataset.key;
+    const input = tile.querySelector('.ptile-url');
+    if (key && data[key] && input) {
+      input.value = data[key];
+      tile.classList.add('connected');
+      tile.querySelector('.ptile-status').textContent = 'Connected';
+    }
+  });
+}
+
+function _idlabUpdatePlatformPreview() {
+  const previewLinks = document.getElementById('idlab-preview-links');
+  if (!previewLinks) return;
+  const icons = [];
+  document.querySelectorAll('#idlab-dsp-grid .ptile.connected, #idlab-social-grid .ptile.connected').forEach(tile => {
+    icons.push('<span class="preview-link-icon">' + tile.querySelector('.ptile-icon').textContent + '</span>');
+  });
+  previewLinks.innerHTML = icons.length ? icons.join('') : '<span style="color:rgba(232,234,246,0.15);font-size:0.5rem">No platforms connected</span>';
 }
 
 // ── ORBITAL CONFIRMATION ENGINE ──
