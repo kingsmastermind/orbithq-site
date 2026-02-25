@@ -3829,13 +3829,15 @@ function _runDockingAnimation(btn){
     setTimeout(()=>{
       document.getElementById('dockTransition').classList.remove('active');
       showCarousel();
+      _checkHashRoute();
     },3500);
   },3200);
 }
 
 async function logout(){
   await _sb.auth.signOut();
-  _currentUser=null;
+  _currentUser=null;_idlabLoaded=false;
+  window.location.hash='';
   const app=document.getElementById('app');app.classList.remove('active');app.classList.add('hidden');
   lobbyActive=false;document.getElementById('carouselLobby').classList.remove('active');
   document.getElementById('navArrowL').classList.remove('show');
@@ -3854,9 +3856,18 @@ async function checkExistingSession(){
     loginCanvasActive=false;
     if(loginAnimFrame)cancelAnimationFrame(loginAnimFrame);
     showCarousel();
+    setTimeout(_checkHashRoute,500);
   }
 }
 checkExistingSession();
+
+function _checkHashRoute(){
+  const hash=window.location.hash.replace('#','');
+  if(hash&&document.getElementById('room-'+hash)){
+    const nav=document.querySelector('[data-room="'+hash+'"]');
+    switchRoom(hash,nav);
+  }
+}
 
 // ════ ROOM NAVIGATION + SLIDE+FADE + WARP FLASH ════
 const roomMeta = {
@@ -3881,6 +3892,7 @@ function switchRoom(roomId, navEl) {
   const current = document.querySelector('.room.active');
   if (current && current.id === 'room-' + roomId) return;
   isTransitioning = true;
+  window.location.hash = roomId;
   // Sidebar active state
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if (navEl) navEl.classList.add('active');
